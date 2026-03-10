@@ -1,0 +1,90 @@
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">Edit Event</h1>
+
+  <div class="bg-white rounded-xl shadow p-6">
+    <%= form_with model: @event, url: admin_event_path(@event), class: "space-y-4" do |f| %>
+      <% if @event.errors.any? %>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <ul class="text-red-700 text-sm list-disc pl-4">
+            <% @event.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      </div>
+
+      <div>
+        <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_area :description, rows: 4, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :starts_at, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.datetime_local_field :starts_at, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        </div>
+        <div>
+          <%= f.label :ends_at, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.datetime_local_field :ends_at, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :venue_id, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :venue_id, Venue.ordered, :id, :name, {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      </div>
+
+      <div>
+        <%= f.label :status, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :status, Event.statuses.keys.map { |s| [s.capitalize, s] }, {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      </div>
+
+      <div>
+        <%= f.label :max_tickets_per_order, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.number_field :max_tickets_per_order, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      </div>
+
+      <fieldset class="border rounded-lg p-4">
+        <legend class="text-sm font-medium text-gray-700 px-2">Event Media</legend>
+        <div class="space-y-6">
+          <%= render "shared/cover_image_field", form: f, event: @event %>
+
+          <hr class="border-gray-200">
+
+          <%= render "shared/media_upload_field", form: f, event: @event,
+              purge_path: ->(ev, opts) { purge_attachment_admin_event_path(ev, **opts) } %>
+        </div>
+      </fieldset>
+
+      <fieldset class="border rounded-lg p-4">
+        <legend class="text-sm font-medium text-gray-700 px-2">Waiting Room</legend>
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <%= f.check_box :waiting_room_enabled, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
+            <%= f.label :waiting_room_enabled, "Enable waiting room", class: "text-sm text-gray-700" %>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= f.label :waiting_room_capacity, "Capacity", class: "block text-sm text-gray-700" %>
+              <%= f.number_field :waiting_room_capacity, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+            </div>
+            <div>
+              <%= f.label :waiting_room_admission_minutes, "Admission window (min)", class: "block text-sm text-gray-700" %>
+              <%= f.number_field :waiting_room_admission_minutes, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="flex gap-3 pt-4">
+        <%= f.submit "Update Event", class: "bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 cursor-pointer" %>
+        <%= link_to "Cancel", admin_event_path(@event), class: "px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50" %>
+      </div>
+    <% end %>
+  </div>
+</div>

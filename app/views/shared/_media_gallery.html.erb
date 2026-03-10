@@ -1,0 +1,38 @@
+<%# Public media gallery for an event %>
+<%# Local: event (Event with media attached) %>
+
+<% if event.media.attached? %>
+  <div class="mt-8">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-200">
+      <div class="border-b border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
+        <h2 class="text-xl font-bold text-gray-900">Photos & Videos</h2>
+      </div>
+
+      <div class="p-6 sm:p-8">
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <% event.media.each do |file| %>
+            <% if event.image?(file) %>
+              <div class="group relative aspect-square overflow-hidden rounded-xl bg-gray-100">
+                <%= image_tag file.variant(resize_to_fill: [400, 400]),
+                    class: "h-full w-full object-cover transition group-hover:scale-105",
+                    loading: "lazy",
+                    alt: file.filename %>
+              </div>
+            <% elsif event.video?(file) %>
+              <div class="relative aspect-square overflow-hidden rounded-xl bg-gray-900">
+                <video
+                  class="h-full w-full object-cover"
+                  controls
+                  preload="metadata"
+                  playsinline>
+                  <source src="<%= url_for(file) %>" type="<%= file.content_type %>">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

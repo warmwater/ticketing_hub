@@ -1,0 +1,152 @@
+<nav class="bg-white shadow-sm border-b border-gray-200" data-controller="navbar">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <%# Logo and brand %>
+      <div class="flex items-center">
+        <%= link_to root_path, class: "flex items-center gap-2 text-indigo-600 hover:text-indigo-700" do %>
+          <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+          </svg>
+          <span class="text-xl font-bold tracking-tight">TicketHub</span>
+        <% end %>
+      </div>
+
+      <%# Desktop navigation links %>
+      <div class="hidden md:flex md:items-center md:gap-1">
+        <%= link_to "Events", events_path,
+            class: "rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors #{request.path.start_with?('/events') ? 'bg-indigo-50 text-indigo-700' : ''}" %>
+
+        <% if user_signed_in? %>
+          <%= link_to "My Tickets", tickets_path,
+              class: "rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors #{request.path.start_with?('/tickets') ? 'bg-indigo-50 text-indigo-700' : ''}" %>
+          <%= link_to "My Orders", orders_path,
+              class: "rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors #{request.path.start_with?('/orders') ? 'bg-indigo-50 text-indigo-700' : ''}" %>
+
+          <% if current_user.admin? %>
+            <%= link_to "Admin", admin_root_path,
+                class: "rounded-md px-3 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors" %>
+          <% end %>
+
+          <% if current_user.organizer? %>
+            <%= link_to "Organizer", organizer_root_path,
+                class: "rounded-md px-3 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors" %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <%# Desktop user menu %>
+      <div class="hidden md:flex md:items-center md:gap-3">
+        <% if user_signed_in? %>
+          <div class="relative" data-controller="dropdown">
+            <button type="button"
+                    class="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+                    data-action="click->dropdown#toggle"
+                    data-dropdown-target="button"
+                    aria-expanded="false"
+                    aria-haspopup="true">
+              <div class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold text-white">
+                <%= current_user.name.first.upcase %>
+              </div>
+              <span><%= current_user.name %></span>
+              <svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-lg bg-white py-1 shadow-lg ring-1 ring-black/5 hidden"
+                 data-dropdown-target="menu"
+                 role="menu">
+              <div class="border-b border-gray-100 px-4 py-2">
+                <p class="text-sm font-medium text-gray-900"><%= current_user.name %></p>
+                <p class="text-xs text-gray-500"><%= current_user.email %></p>
+              </div>
+              <%= link_to "Edit Profile", edit_user_registration_path,
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+                  role: "menuitem" %>
+              <%= button_to "Sign Out", destroy_user_session_path,
+                  method: :delete,
+                  class: "block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50",
+                  role: "menuitem" %>
+            </div>
+          </div>
+        <% else %>
+          <%= link_to "Sign In", new_user_session_path,
+              class: "rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors" %>
+          <%= link_to "Sign Up", new_user_registration_path,
+              class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors" %>
+        <% end %>
+      </div>
+
+      <%# Mobile hamburger button %>
+      <div class="flex md:hidden">
+        <button type="button"
+                class="inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                data-action="click->navbar#toggleMobile"
+                data-navbar-target="hamburger"
+                aria-controls="mobile-menu"
+                aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <%# Hamburger icon %>
+          <svg class="h-6 w-6" data-navbar-target="openIcon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <%# Close icon %>
+          <svg class="hidden h-6 w-6" data-navbar-target="closeIcon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <%# Mobile menu %>
+  <div class="hidden md:hidden border-t border-gray-200" id="mobile-menu" data-navbar-target="mobileMenu">
+    <div class="space-y-1 px-4 pb-3 pt-2">
+      <%= link_to "Events", events_path,
+          class: "block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 #{request.path.start_with?('/events') ? 'bg-indigo-50 text-indigo-700' : ''}" %>
+
+      <% if user_signed_in? %>
+        <%= link_to "My Tickets", tickets_path,
+            class: "block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 #{request.path.start_with?('/tickets') ? 'bg-indigo-50 text-indigo-700' : ''}" %>
+        <%= link_to "My Orders", orders_path,
+            class: "block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 #{request.path.start_with?('/orders') ? 'bg-indigo-50 text-indigo-700' : ''}" %>
+
+        <% if current_user.admin? %>
+          <%= link_to "Admin Dashboard", admin_root_path,
+              class: "block rounded-md px-3 py-2 text-base font-medium text-purple-700 hover:bg-purple-50" %>
+        <% end %>
+
+        <% if current_user.organizer? %>
+          <%= link_to "Organizer Dashboard", organizer_root_path,
+              class: "block rounded-md px-3 py-2 text-base font-medium text-purple-700 hover:bg-purple-50" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if user_signed_in? %>
+      <div class="border-t border-gray-200 px-4 pb-3 pt-4">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">
+            <%= current_user.name.first.upcase %>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-900"><%= current_user.name %></p>
+            <p class="text-xs text-gray-500"><%= current_user.email %></p>
+          </div>
+        </div>
+        <%= link_to "Edit Profile", edit_user_registration_path,
+            class: "block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50" %>
+        <%= button_to "Sign Out", destroy_user_session_path,
+            method: :delete,
+            class: "block w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-700 hover:bg-gray-50" %>
+      </div>
+    <% else %>
+      <div class="border-t border-gray-200 px-4 pb-3 pt-4 space-y-2">
+        <%= link_to "Sign In", new_user_session_path,
+            class: "block rounded-md px-3 py-2 text-center text-base font-medium text-gray-700 hover:bg-gray-100" %>
+        <%= link_to "Sign Up", new_user_registration_path,
+            class: "block rounded-md bg-indigo-600 px-3 py-2 text-center text-base font-medium text-white hover:bg-indigo-700" %>
+      </div>
+    <% end %>
+  </div>
+</nav>

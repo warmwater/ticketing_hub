@@ -1,0 +1,71 @@
+module Admin
+  class EventsController < Admin::ApplicationController
+    before_action :set_event, only: [:show, :edit, :update, :destroy, :publish, :cancel, :purge_attachment]
+
+    def index
+      events = Event.includes(:organizer, :venue).order(created_at: :desc)
+      events = events.where(status: params[:status]) if params[:status].present?
+      @pagy, @events = pagy(events)
+    end
+
+    def show
+      @ticket_types = @event.ticket_types
+      @orders = @event.orders.includes(:user).order(created_at: :desc).limit(20)
+    end
+
+    def edit
+    end
+
+    def update
+      @event.cover_image.purge if params[:event][:remove_cover_image] == "1"
+
+      # Append new media files instead of replacing
+      new_media = params[:event]&.delete(:media)
+
+      if @event.update(event_params)
+        @event.media.attach(new_media) if new_media.present?
+        redirect_to admin_event_path(@event), notice: "Event updated."
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      @event.destroy
+      redirect_to admin_events_path, notice: "Event deleted."
+    end
+
+    def publish
+      @event.published!
+      redirect_to admin_event_path(@event), notice: "Event published."
+    end
+
+    def cancel
+      @event.cancelled!
+      redirect_to admin_event_path(@event), notice: "Event cancelled."
+    end
+
+    def purge_attachment
+      attachment = ActiveStorage::Attachment.find(params[:attachment_id])
+      if attachment.record == @event
+        attachment.purge
+        redirect_back fallback_location: edit_admin_event_path(@event), notice: "File removed."
+      else
+        redirect_back fallback_location: edit_admin_event_path(@event), alert: "Attachment not found."
+      end
+    end
+
+    private
+
+    def set_event
+      @event = Event.find(params[:id])
+    end
+
+    def event_params
+      params.require(:event).permit(:name, :description, :starts_at, :ends_at, :venue_id, :status,
+                                    :waiting_room_enabled, :waiting_room_capacity,
+                                    :waiting_room_admission_minutes, :max_tickets_per_order,
+                                    :cover_image)
+    end
+  end
+end

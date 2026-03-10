@@ -1,0 +1,53 @@
+<div class="max-w-lg mx-auto px-4 py-12">
+  <div class="text-center mb-8">
+    <h1 class="text-2xl font-bold text-gray-900"><%= @event.name %></h1>
+    <p class="text-gray-500 mt-1">Virtual Waiting Room</p>
+  </div>
+
+  <% if @entry.nil? || @entry.left? || @entry.expired? %>
+    <!-- Not in queue -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+      <div class="mb-6">
+        <svg class="mx-auto h-16 w-16 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
+      <h2 class="text-xl font-semibold text-gray-900 mb-2">High demand event!</h2>
+      <p class="text-gray-600 mb-6">This event has a virtual waiting room. Join the queue and we'll let you in when it's your turn to purchase tickets.</p>
+      <p class="text-sm text-gray-500 mb-6"><%= @event.users_in_waiting_room %> people currently waiting</p>
+
+      <%= form_with url: event_waiting_room_path(@event), method: :post, class: "inline" do %>
+        <%= submit_tag "Join Waiting Room", class: "bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition cursor-pointer text-lg" %>
+      <% end %>
+    </div>
+
+  <% elsif @entry.waiting? %>
+    <!-- In queue - waiting -->
+    <%= turbo_stream_from "waiting_room_entry_#{@entry.id}" %>
+
+    <div id="waiting_room_status"
+         data-controller="waiting-room"
+         data-waiting-room-event-id-value="<%= @event.id %>"
+         data-waiting-room-poll-interval-value="5000">
+      <%= render "waiting_rooms/position", entry: @entry, position: @entry.queue_position, total: @entry.total_waiting %>
+    </div>
+
+    <div class="mt-6 text-center">
+      <%= link_to "Leave Queue", event_waiting_room_path(@event), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to leave the queue?" }, class: "text-red-600 hover:text-red-800 text-sm font-medium" %>
+    </div>
+
+  <% elsif @entry.admitted? && !@entry.admission_expired? %>
+    <!-- Admitted -->
+    <div id="waiting_room_status"
+         data-controller="waiting-room"
+         data-waiting-room-event-id-value="<%= @event.id %>"
+         data-waiting-room-admitted-value="true"
+         data-waiting-room-expires-at-value="<%= @entry.expires_at.iso8601 %>">
+      <%= render "waiting_rooms/admitted", entry: @entry, event: @event %>
+    </div>
+  <% end %>
+
+  <div class="mt-8 text-center">
+    <%= link_to "Back to Event", event_path(@event), class: "text-gray-500 hover:text-gray-700 text-sm" %>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+    <!-- Ticket Header -->
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-6 text-white">
+      <h1 class="text-2xl font-bold"><%= @ticket.event.name %></h1>
+      <p class="text-indigo-100 mt-1"><%= @ticket.ticket_type.name %></p>
+    </div>
+
+    <!-- Dashed separator -->
+    <div class="border-t-2 border-dashed border-gray-200 relative">
+      <div class="absolute -left-3 -top-3 w-6 h-6 bg-gray-100 rounded-full"></div>
+      <div class="absolute -right-3 -top-3 w-6 h-6 bg-gray-100 rounded-full"></div>
+    </div>
+
+    <!-- Ticket Details -->
+    <div class="p-6 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-wide">Date</p>
+          <p class="font-medium"><%= @ticket.event.starts_at.strftime("%B %d, %Y") %></p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-wide">Time</p>
+          <p class="font-medium"><%= @ticket.event.starts_at.strftime("%I:%M %p") %></p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-wide">Attendee</p>
+          <p class="font-medium"><%= @ticket.attendee_name %></p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-wide">Status</p>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+            <%= case @ticket.status
+                when 'active' then 'bg-green-100 text-green-800'
+                when 'used' then 'bg-blue-100 text-blue-800'
+                when 'cancelled' then 'bg-red-100 text-red-800'
+                else 'bg-gray-100 text-gray-800'
+                end %>">
+            <%= @ticket.status.capitalize %>
+          </span>
+        </div>
+      </div>
+
+      <!-- Barcode -->
+      <div class="mt-6 text-center border-t pt-6">
+        <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Barcode</p>
+        <div class="bg-gray-50 rounded-lg p-4">
+          <p class="font-mono text-lg tracking-widest break-all"><%= @ticket.barcode %></p>
+        </div>
+        <p class="text-xs text-gray-400 mt-2">Present this code at the venue entrance</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 text-center">
+    <%= link_to "Back to My Tickets", tickets_path, class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
+  </div>
+</div>

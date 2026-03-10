@@ -1,0 +1,40 @@
+<div class="min-h-screen flex items-center justify-center py-12 px-4">
+  <div class="max-w-md w-full">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-indigo-600">TicketHub</h1>
+      <h2 class="mt-2 text-xl text-gray-700">Sign in to your account</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", placeholder: "you@example.com" %>
+        </div>
+
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center gap-2">
+            <%= f.check_box :remember_me, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
+            <%= f.label :remember_me, class: "text-sm text-gray-600" %>
+          </div>
+        <% end %>
+
+        <div class="pt-2">
+          <%= f.submit "Sign in", class: "w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition cursor-pointer" %>
+        </div>
+      <% end %>
+
+      <div class="mt-6 text-center text-sm text-gray-500">
+        Don't have an account?
+        <%= link_to "Sign up", new_registration_path(resource_name), class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
+        <br>
+        <%= link_to "Forgot your password?", new_password_path(resource_name), class: "text-gray-500 hover:text-gray-700 text-xs" %>
+      </div>
+    </div>
+  </div>
+</div>
