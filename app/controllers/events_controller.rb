@@ -1,5 +1,4 @@
 class EventsController < ApplicationController
-
   def index
     events = Event.published_events.includes(:venue, :ticket_types)
     events = events.where("name LIKE ?", "%#{params[:q]}%") if params[:q].present?

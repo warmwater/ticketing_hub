@@ -11,7 +11,7 @@ class CreateWaitingRoomEntries < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :waiting_room_entries, [:event_id, :user_id], unique: true
+    add_index :waiting_room_entries, [ :event_id, :user_id ], unique: true
     add_index :waiting_room_entries, :admission_token, unique: true
     add_index :waiting_room_entries, :status
   end

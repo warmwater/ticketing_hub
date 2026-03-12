@@ -1,7 +1,7 @@
 module Organizer
   class TicketTypesController < Organizer::ApplicationController
     before_action :set_event
-    before_action :set_ticket_type, only: [:edit, :update, :destroy]
+    before_action :set_ticket_type, only: [ :edit, :update, :destroy ]
 
     def index
       @ticket_types = @event.ticket_types.order(:created_at)

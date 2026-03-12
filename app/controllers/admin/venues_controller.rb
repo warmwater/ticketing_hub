@@ -1,6 +1,6 @@
 module Admin
   class VenuesController < Admin::ApplicationController
-    before_action :set_venue, only: [:show, :edit, :update, :destroy]
+    before_action :set_venue, only: [ :show, :edit, :update, :destroy ]
 
     def index
       @pagy, @venues = pagy(Venue.ordered.includes(:created_by))

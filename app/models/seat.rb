@@ -5,7 +5,7 @@ class Seat < ApplicationRecord
   validates :row_label, presence: true
   validates :seat_number, presence: true,
             numericality: { greater_than: 0 },
-            uniqueness: { scope: [:section_id, :row_label] }
+            uniqueness: { scope: [ :section_id, :row_label ] }
 
   scope :active, -> { where(active: true) }
   scope :ordered, -> { order(:row_label, :seat_number) }

@@ -12,7 +12,7 @@ class Ticket < ApplicationRecord
 
   before_validation :generate_barcode, on: :create
 
-  scope :valid_tickets, -> { where(status: [:active]) }
+  scope :valid_tickets, -> { where(status: [ :active ]) }
 
   def seat_label
     if seat.present?

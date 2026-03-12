@@ -1,7 +1,7 @@
 module Admin
   class VenueSectionsController < Admin::ApplicationController
     before_action :set_venue
-    before_action :set_section, only: [:update, :destroy, :generate_seats]
+    before_action :set_section, only: [ :update, :destroy, :generate_seats ]
 
     def create
       @section = @venue.sections.build(section_params)

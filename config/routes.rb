@@ -6,19 +6,19 @@ Rails.application.routes.draw do
   root "home#index"
 
   # Public event browsing
-  resources :events, only: [:index, :show] do
-    resource :waiting_room, only: [:show, :create, :destroy], controller: "waiting_rooms" do
+  resources :events, only: [ :index, :show ] do
+    resource :waiting_room, only: [ :show, :create, :destroy ], controller: "waiting_rooms" do
       get :status
     end
-    resources :orders, only: [:new, :create] do
+    resources :orders, only: [ :new, :create ] do
       collection do
         get :select_seats
       end
     end
   end
 
-  resources :orders, only: [:index, :show]
-  resources :tickets, only: [:index, :show]
+  resources :orders, only: [ :index, :show ]
+  resources :tickets, only: [ :index, :show ]
 
   # Turbo Native path configuration
   get "/turbo-native/path-configuration", to: "turbo_native#path_configuration", as: :turbo_native_path_configuration
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   namespace :admin do
     root "dashboard#index"
     resources :venues do
-      resources :sections, only: [:create, :update, :destroy], controller: "venue_sections" do
+      resources :sections, only: [ :create, :update, :destroy ], controller: "venue_sections" do
         member do
           post :generate_seats
         end
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
       end
       resources :ticket_types
     end
-    resources :orders, only: [:index, :show]
+    resources :orders, only: [ :index, :show ]
   end
 
   # Health check

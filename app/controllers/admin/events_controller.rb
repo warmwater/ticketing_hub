@@ -1,6 +1,6 @@
 module Admin
   class EventsController < Admin::ApplicationController
-    before_action :set_event, only: [:show, :edit, :update, :destroy, :publish, :cancel, :purge_attachment]
+    before_action :set_event, only: [ :show, :edit, :update, :destroy, :publish, :cancel, :purge_attachment ]
 
     def index
       events = Event.includes(:organizer, :venue).order(created_at: :desc)

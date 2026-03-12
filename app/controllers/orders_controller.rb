@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = current_user.orders.includes(order_items: [:ticket_type, :tickets]).find(params[:id])
+    @order = current_user.orders.includes(order_items: [ :ticket_type, :tickets ]).find(params[:id])
   end
 
   def new

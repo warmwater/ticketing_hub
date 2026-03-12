@@ -122,12 +122,12 @@ module Middleware
         poll_url: "/events/#{event_id}/waiting_room/status"
       )
 
-      [200, response_headers, [html]]
+      [ 200, response_headers, [ html ] ]
     end
 
     # Redirect unadmitted users to the waiting room
     def redirect_to_waiting_room(event_id)
-      [302, { "location" => "/events/#{event_id}/waiting_room", "content-type" => "text/html" }, [""]]
+      [ 302, { "location" => "/events/#{event_id}/waiting_room", "content-type" => "text/html" }, [ "" ] ]
     end
 
     def response_headers

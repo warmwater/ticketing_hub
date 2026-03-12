@@ -33,6 +33,6 @@ class WaitingRoomEntry < ApplicationRecord
 
   def minutes_remaining
     return 0 unless admitted? && expires_at.present?
-    [(expires_at - Time.current).to_i / 60, 0].max
+    [ (expires_at - Time.current).to_i / 60, 0 ].max
   end
 end

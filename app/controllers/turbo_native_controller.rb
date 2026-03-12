@@ -11,22 +11,22 @@ class TurboNativeController < ApplicationController
       },
       rules: [
         {
-          patterns: ["/new$", "/edit$"],
+          patterns: [ "/new$", "/edit$" ],
           properties: { presentation: "modal" }
         },
         {
-          patterns: ["/sign_in", "/sign_up", "/password"],
+          patterns: [ "/sign_in", "/sign_up", "/password" ],
           properties: { presentation: "modal" }
         },
         {
-          patterns: ["/waiting_room"],
+          patterns: [ "/waiting_room" ],
           properties: {
             presentation: "default",
             pull_to_refresh_enabled: false
           }
         },
         {
-          patterns: [".*"],
+          patterns: [ ".*" ],
           properties: {
             presentation: "default",
             pull_to_refresh_enabled: true

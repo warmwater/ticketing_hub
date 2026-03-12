@@ -34,7 +34,7 @@ class Event < ApplicationRecord
   end
 
   def tickets_sold
-    ticket_types.joins(:tickets).where(tickets: { status: [:active, :used] }).count
+    ticket_types.joins(:tickets).where(tickets: { status: [ :active, :used ] }).count
   end
 
   def tickets_available

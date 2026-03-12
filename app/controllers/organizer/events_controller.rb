@@ -1,6 +1,6 @@
 module Organizer
   class EventsController < Organizer::ApplicationController
-    before_action :set_event, only: [:show, :edit, :update, :destroy, :publish, :cancel, :toggle_waiting_room, :purge_attachment]
+    before_action :set_event, only: [ :show, :edit, :update, :destroy, :publish, :cancel, :toggle_waiting_room, :purge_attachment ]
 
     def index
       @pagy, @events = pagy(

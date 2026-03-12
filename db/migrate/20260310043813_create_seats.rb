@@ -10,6 +10,6 @@ class CreateSeats < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :seats, [:section_id, :row_label, :seat_number], unique: true, name: "idx_seats_unique_in_section"
+    add_index :seats, [ :section_id, :row_label, :seat_number ], unique: true, name: "idx_seats_unique_in_section"
   end
 end

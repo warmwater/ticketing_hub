@@ -14,11 +14,11 @@ module WaitingRoomEntryCacheable
   def cache_entry_status
     ttl = if waiting?
             30 # Refresh frequently for waiting users
-          elsif admitted? && expires_at
-            [(expires_at - Time.current).to_i, 60].max
-          else
+    elsif admitted? && expires_at
+            [ (expires_at - Time.current).to_i, 60 ].max
+    else
             300 # 5 min default for completed/expired/left
-          end
+    end
 
     WaitingRoomRedis.set(
       "entry:#{id}:status",
@@ -37,7 +37,7 @@ module WaitingRoomEntryCacheable
   def cache_admission_token
     return unless admission_token.present? && expires_at.present?
 
-    ttl = [(expires_at - Time.current).to_i, 60].max
+    ttl = [ (expires_at - Time.current).to_i, 60 ].max
 
     WaitingRoomRedis.set(
       "token:#{admission_token}",
