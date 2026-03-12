@@ -12,6 +12,7 @@ class Event < ApplicationRecord
   has_many_attached :media
 
   enum :status, { draft: 0, published: 1, cancelled: 2, completed: 3 }
+  enum :seat_selection_mode, { none: 0, customer_pick: 1, auto_assign: 2 }, prefix: :seating
 
   validates :name, presence: true
   validates :starts_at, presence: true
@@ -42,6 +43,10 @@ class Event < ApplicationRecord
 
   def sold_out?
     tickets_available <= 0
+  end
+
+  def seated_event?
+    !seating_none?
   end
 
   def waiting_room_active?

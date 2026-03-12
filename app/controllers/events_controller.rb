@@ -13,5 +13,10 @@ class EventsController < ApplicationController
     if @event.waiting_room_active? && current_user
       @waiting_entry = @event.waiting_room_entries.find_by(user: current_user)
     end
+
+    # Load seating layout if venue has sections
+    if @event.venue&.has_seating?
+      @sections = @event.venue.sections.ordered.includes(:seats)
+    end
   end
 end

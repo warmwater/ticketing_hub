@@ -1,0 +1,116 @@
+<%# Seat Selection - Customer Pick Flow %>
+
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <!-- Back Link -->
+  <div class="mb-6">
+    <%= link_to event_path(@event), class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-indigo-600 transition" do %>
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to Event
+    <% end %>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-200">
+    <div class="border-b border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
+      <h1 class="text-xl font-bold text-gray-900">Choose Your Seats</h1>
+      <p class="mt-1 text-sm text-gray-500"><%= @event.name %></p>
+    </div>
+
+    <%= form_with url: event_orders_path(@event), method: :post, data: { controller: "seat-picker", turbo_frame: "_top" } do |f| %>
+      <div class="p-6 sm:p-8 space-y-8">
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center gap-4 text-sm">
+          <div class="flex items-center gap-1.5">
+            <div class="h-5 w-5 rounded bg-emerald-500 ring-1 ring-emerald-600"></div>
+            <span class="text-gray-600">Available</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="h-5 w-5 rounded bg-indigo-500 ring-1 ring-indigo-600"></div>
+            <span class="text-gray-600">Selected</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="h-5 w-5 rounded bg-slate-400 ring-1 ring-slate-500"></div>
+            <span class="text-gray-600">Taken</span>
+          </div>
+        </div>
+
+        <% @selections.each do |sel| %>
+          <div class="rounded-xl border border-gray-200 p-5" data-seat-picker-target="section"
+               data-section-ticket-type-id="<%= sel[:ticket_type].id %>"
+               data-section-required="<%= sel[:quantity] %>">
+
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-900"><%= sel[:section].name %></h2>
+                <p class="text-sm text-gray-500">
+                  <%= sel[:ticket_type].name %> &middot; <%= number_to_currency(sel[:ticket_type].price) %>
+                </p>
+              </div>
+              <div class="rounded-full bg-indigo-50 px-3 py-1 ring-1 ring-indigo-200">
+                <span class="text-sm font-semibold text-indigo-700">
+                  Select <span data-seat-picker-target="counter" data-counter-for="<%= sel[:ticket_type].id %>">0</span> / <%= sel[:quantity] %> seats
+                </span>
+              </div>
+            </div>
+
+            <!-- Seat Map -->
+            <div class="overflow-x-auto">
+              <div class="inline-block rounded-lg bg-gray-50 p-4 min-w-fit">
+                <!-- Stage indicator -->
+                <div class="mb-3 text-center">
+                  <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600">Stage</div>
+                </div>
+
+                <% sel[:all_seats].group_by(&:row_label).each do |row_label, seats| %>
+                  <div class="flex items-center gap-1 mb-1">
+                    <span class="w-7 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
+                    <% seats.each do |seat| %>
+                      <% taken = sel[:taken_seat_ids].include?(seat.id) %>
+                      <% if taken %>
+                        <div class="h-7 w-7 rounded cursor-not-allowed bg-slate-400 text-white text-center text-xs leading-7 font-medium"
+                             title="Taken"><%= seat.seat_number %></div>
+                      <% else %>
+                        <button type="button"
+                                class="seat-btn h-7 w-7 rounded bg-emerald-500 text-white text-center text-xs leading-7 font-medium ring-1 ring-emerald-600 hover:bg-emerald-400 transition cursor-pointer"
+                                data-action="click->seat-picker#toggleSeat"
+                                data-seat-id="<%= seat.id %>"
+                                data-ticket-type-id="<%= sel[:ticket_type].id %>"
+                                title="Row <%= seat.row_label %>, Seat <%= seat.seat_number %>">
+                          <%= seat.seat_number %>
+                        </button>
+                      <% end %>
+                    <% end %>
+                    <span class="w-7 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- GA ticket types (if any, just pass quantities through) -->
+        <% @ticket_quantities.each do |ticket_type_id, quantity| %>
+          <% tt = @event.ticket_types.find_by(id: ticket_type_id) %>
+          <% next unless tt %>
+          <% next if tt.section&.seated? %>
+          <input type="hidden" name="ticket_quantities[<%= ticket_type_id %>]" value="<%= quantity %>">
+        <% end %>
+      </div>
+
+      <!-- Hidden seat selection inputs (populated by Stimulus) -->
+      <div data-seat-picker-target="hiddenInputs"></div>
+
+      <!-- Submit -->
+      <div class="border-t border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-500" data-seat-picker-target="status">Select your seats to continue</p>
+          <%= f.submit "Confirm Seats & Place Order",
+              disabled: true,
+              data: { seat_picker_target: "submitBtn" },
+              class: "rounded-lg bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

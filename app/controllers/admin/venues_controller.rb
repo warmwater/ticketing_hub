@@ -7,6 +7,7 @@ module Admin
     end
 
     def show
+      @sections = @venue.sections.ordered.includes(:seats)
       @events = @venue.events.includes(:organizer).order(starts_at: :desc)
     end
 

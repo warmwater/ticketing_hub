@@ -16,15 +16,35 @@ class Order < ApplicationRecord
     self.total_amount = order_items.sum { |item| item.quantity * item.unit_price }
   end
 
-  def generate_tickets!
-    order_items.each do |item|
-      item.quantity.times do
-        item.tickets.create!(
-          barcode: SecureRandom.hex(16).upcase,
-          status: :active,
-          attendee_name: user.name,
-          attendee_email: user.email
-        )
+  def generate_tickets!(seat_assignments = {})
+    ActiveRecord::Base.transaction do
+      order_items.each do |item|
+        section = item.ticket_type.section
+        seats_for_item = seat_assignments[item.ticket_type_id.to_s] || []
+
+        item.quantity.times do |i|
+          seat = seats_for_item[i]
+
+          attrs = {
+            barcode: SecureRandom.hex(16).upcase,
+            status: :active,
+            attendee_name: user.name,
+            attendee_email: user.email
+          }
+
+          if seat.present?
+            attrs.merge!(
+              seat: seat,
+              section_name: section&.name,
+              row_label: seat.row_label,
+              seat_number: seat.seat_number
+            )
+          elsif section.present?
+            attrs[:section_name] = section.name
+          end
+
+          item.tickets.create!(attrs)
+        end
       end
     end
   end

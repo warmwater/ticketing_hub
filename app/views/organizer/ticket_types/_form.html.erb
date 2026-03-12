@@ -36,6 +36,16 @@
       <%= f.number_field :max_per_order, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
     </div>
 
+    <% if @event.venue&.has_seating? %>
+      <div>
+        <%= f.label :section_id, "Venue Section", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :section_id, @event.venue.sections.ordered, :id, :name,
+            { prompt: "No section (general)" },
+            class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        <p class="mt-1 text-xs text-gray-500">Link this ticket type to a specific venue section for seat assignment.</p>
+      </div>
+    <% end %>
+
     <div class="grid grid-cols-2 gap-4">
       <div>
         <%= f.label :sale_starts_at, "Sale starts", class: "block text-sm font-medium text-gray-700" %>

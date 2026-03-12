@@ -9,8 +9,12 @@ module Admin
     end
 
     def show
-      @ticket_types = @event.ticket_types
+      @ticket_types = @event.ticket_types.includes(:section)
       @orders = @event.orders.includes(:user).order(created_at: :desc).limit(20)
+
+      if @event.venue&.has_seating?
+        @sections = @event.venue.sections.ordered.includes(:seats)
+      end
     end
 
     def edit
@@ -65,7 +69,7 @@ module Admin
       params.require(:event).permit(:name, :description, :starts_at, :ends_at, :venue_id, :status,
                                     :waiting_room_enabled, :waiting_room_capacity,
                                     :waiting_room_admission_minutes, :max_tickets_per_order,
-                                    :cover_image)
+                                    :cover_image, :seat_selection_mode)
     end
   end
 end

@@ -9,9 +9,14 @@ module Organizer
     end
 
     def show
-      @ticket_types = @event.ticket_types
+      @ticket_types = @event.ticket_types.includes(:section)
       @recent_orders = @event.orders.includes(:user).order(created_at: :desc).limit(20)
       @waiting_count = @event.waiting_room_entries.waiting.count
+
+      # Load seating layout if venue has sections
+      if @event.venue&.has_seating?
+        @sections = @event.venue.sections.ordered.includes(:seats)
+      end
     end
 
     def new
@@ -90,7 +95,7 @@ module Organizer
       params.require(:event).permit(:name, :description, :starts_at, :ends_at, :venue_id,
                                     :waiting_room_enabled, :waiting_room_capacity,
                                     :waiting_room_admission_minutes, :max_tickets_per_order,
-                                    :cover_image)
+                                    :seat_selection_mode, :cover_image)
     end
   end
 end

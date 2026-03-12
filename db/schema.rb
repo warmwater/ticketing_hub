@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_09_045241) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_10_043814) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -47,6 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_045241) do
     t.integer "max_tickets_per_order", default: 10
     t.string "name", null: false
     t.integer "organizer_id", null: false
+    t.integer "seat_selection_mode", default: 0, null: false
     t.datetime "starts_at", null: false
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
@@ -85,6 +86,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_045241) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
+  create_table "seats", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.string "label"
+    t.string "row_label", null: false
+    t.integer "seat_number", null: false
+    t.integer "section_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_id", "row_label", "seat_number"], name: "idx_seats_unique_in_section", unique: true
+    t.index ["section_id"], name: "index_seats_on_section_id"
+  end
+
+  create_table "sections", force: :cascade do |t|
+    t.integer "capacity", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.integer "section_type", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.integer "venue_id", null: false
+    t.index ["venue_id", "name"], name: "index_sections_on_venue_id_and_name", unique: true
+    t.index ["venue_id"], name: "index_sections_on_venue_id"
+  end
+
   create_table "ticket_types", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -95,8 +120,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_045241) do
     t.integer "quantity", null: false
     t.datetime "sale_ends_at"
     t.datetime "sale_starts_at"
+    t.integer "section_id"
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_ticket_types_on_event_id"
+    t.index ["section_id"], name: "index_ticket_types_on_section_id"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -105,10 +132,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_045241) do
     t.string "barcode", null: false
     t.datetime "created_at", null: false
     t.integer "order_item_id", null: false
+    t.string "row_label"
+    t.integer "seat_id"
+    t.integer "seat_number"
+    t.string "section_name"
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["barcode"], name: "index_tickets_on_barcode", unique: true
     t.index ["order_item_id"], name: "index_tickets_on_order_item_id"
+    t.index ["seat_id"], name: "index_tickets_on_seat_id"
     t.index ["status"], name: "index_tickets_on_status"
   end
 
@@ -165,8 +197,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_045241) do
   add_foreign_key "order_items", "ticket_types"
   add_foreign_key "orders", "events"
   add_foreign_key "orders", "users"
+  add_foreign_key "seats", "sections"
+  add_foreign_key "sections", "venues"
   add_foreign_key "ticket_types", "events"
+  add_foreign_key "ticket_types", "sections"
   add_foreign_key "tickets", "order_items"
+  add_foreign_key "tickets", "seats"
   add_foreign_key "venues", "users", column: "created_by_id"
   add_foreign_key "waiting_room_entries", "events"
   add_foreign_key "waiting_room_entries", "users"

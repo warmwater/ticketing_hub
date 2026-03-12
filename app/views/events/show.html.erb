@@ -103,6 +103,101 @@
   <!-- Media Gallery -->
   <%= render "shared/media_gallery", event: @event %>
 
+  <!-- Venue Seating Layout -->
+  <% if @sections.present? %>
+    <div class="mt-8">
+      <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-200">
+        <div class="border-b border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
+          <div class="flex items-center gap-2">
+            <svg class="h-5 w-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            <h2 class="text-xl font-bold text-gray-900">Venue Seating</h2>
+          </div>
+          <p class="mt-1 text-sm text-gray-500"><%= @event.venue.name %></p>
+        </div>
+
+        <div class="p-6 sm:p-8">
+          <!-- Legend -->
+          <div class="flex flex-wrap items-center gap-4 text-sm mb-6">
+            <div class="flex items-center gap-1.5">
+              <div class="h-4 w-4 rounded bg-emerald-500 ring-1 ring-emerald-600"></div>
+              <span class="text-gray-600">Available</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <div class="h-4 w-4 rounded bg-slate-400 ring-1 ring-slate-500"></div>
+              <span class="text-gray-600">Taken</span>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <% @sections.each do |section| %>
+              <div class="rounded-xl border border-gray-200 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                  <div class="flex items-center gap-3">
+                    <h3 class="text-lg font-semibold text-gray-900"><%= section.name %></h3>
+                    <% if section.general_admission? %>
+                      <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">General Admission</span>
+                    <% else %>
+                      <span class="inline-flex items-center rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20">Assigned Seating</span>
+                    <% end %>
+                  </div>
+                  <% if section.general_admission? %>
+                    <% available_ga = section.available_capacity_for_event(@event) %>
+                    <span class="text-sm font-medium <%= available_ga > 0 ? 'text-green-700' : 'text-red-600' %>">
+                      <%= available_ga %> / <%= section.capacity %> spots available
+                    </span>
+                  <% else %>
+                    <% available_seats = section.available_seats_for_event(@event) %>
+                    <span class="text-sm font-medium <%= available_seats.any? ? 'text-green-700' : 'text-red-600' %>">
+                      <%= available_seats.count %> / <%= section.active_seats.count %> seats available
+                    </span>
+                  <% end %>
+                </div>
+
+                <% if section.seated? && section.seats.any? %>
+                  <% available_seat_ids = section.available_seats_for_event(@event).pluck(:id) %>
+                  <div class="overflow-x-auto">
+                    <div class="inline-block rounded-lg bg-gray-50 p-4 min-w-fit">
+                      <!-- Stage indicator -->
+                      <div class="mb-3 text-center">
+                        <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600">Stage</div>
+                      </div>
+
+                      <% section.rows.each do |row_label, seats| %>
+                        <div class="flex items-center gap-0.5 mb-0.5">
+                          <span class="w-6 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
+                          <% seats.each do |seat| %>
+                            <% available = available_seat_ids.include?(seat.id) %>
+                            <div class="h-5 w-5 rounded text-center text-[10px] leading-5 font-medium
+                              <%= available ? 'bg-emerald-500 text-white ring-1 ring-emerald-600' : 'bg-slate-400 text-white ring-1 ring-slate-500' %>"
+                                 title="<%= available ? 'Available' : 'Taken' %> — Row <%= seat.row_label %>, Seat <%= seat.seat_number %>">
+                              <%= seat.seat_number %>
+                            </div>
+                          <% end %>
+                          <span class="w-6 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% elsif section.general_admission? %>
+                  <% available_ga = section.available_capacity_for_event(@event) %>
+                  <% pct = section.capacity > 0 ? ((section.capacity - available_ga).to_f / section.capacity * 100).round : 0 %>
+                  <div class="mt-2">
+                    <div class="h-3 w-full rounded-full bg-gray-200 overflow-hidden">
+                      <div class="h-full rounded-full <%= pct >= 90 ? 'bg-red-500' : pct >= 70 ? 'bg-amber-500' : 'bg-green-500' %>" style="width: <%= pct %>%"></div>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500"><%= pct %>% sold</p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <!-- Ticket Selection -->
   <div class="mt-8">
     <%= turbo_frame_tag "ticket_selection" do %>
@@ -164,6 +259,14 @@
                             <% if tt.description.present? %>
                               <div class="mt-1 text-sm text-gray-500"><%= tt.description %></div>
                             <% end %>
+                            <% if tt.section.present? %>
+                              <div class="mt-1 text-xs text-indigo-600 font-medium">
+                                <span class="inline-flex items-center gap-1">
+                                  <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                                  <%= tt.section.name %> &middot; <%= tt.section.general_admission? ? "General Admission" : "Assigned Seating" %>
+                                </span>
+                              </div>
+                            <% end %>
                           </td>
                           <td class="px-4 py-4 text-sm font-semibold text-gray-900">
                             <%= number_to_currency(tt.price) %>
@@ -198,7 +301,7 @@
                 </div>
 
                 <!-- Ticket Types Cards (Mobile) -->
-                <div class="divide-y divide-gray-100 sm:hidden">
+                <div class="divide-y divide-gray-100 sm:hidden" data-controller="mobile-ticket-inputs">
                   <% @event.ticket_types.each do |tt| %>
                     <div class="p-4">
                       <div class="flex items-start justify-between">
@@ -207,11 +310,16 @@
                           <% if tt.description.present? %>
                             <div class="mt-1 text-sm text-gray-500"><%= tt.description %></div>
                           <% end %>
+                          <% if tt.section.present? %>
+                            <div class="mt-1 text-xs text-indigo-600 font-medium"><%= tt.section.name %></div>
+                          <% end %>
                           <div class="mt-2 text-lg font-bold text-indigo-600"><%= number_to_currency(tt.price) %></div>
                         </div>
                         <% if tt.available_quantity > 0 %>
                           <input type="number"
-                                 name="ticket_quantities[<%= tt.id %>]"
+                                 name="mobile_ticket_quantities[<%= tt.id %>]"
+                                 data-ticket-id="<%= tt.id %>"
+                                 data-mobile-ticket-inputs-target="input"
                                  min="0"
                                  max="<%= [tt.available_quantity, tt.max_per_order].min %>"
                                  value="0"
@@ -233,7 +341,8 @@
               <!-- Submit -->
               <div class="border-t border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
                 <div class="flex items-center justify-end">
-                  <%= f.submit "Get Tickets",
+                  <% btn_text = @event.seating_customer_pick? ? "Choose Seats" : "Get Tickets" %>
+                  <%= f.submit btn_text,
                       class: "rounded-lg bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer" %>
                 </div>
               </div>

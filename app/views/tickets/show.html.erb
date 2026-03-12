@@ -41,6 +41,13 @@
         </div>
       </div>
 
+      <% if @ticket.seat_label.present? %>
+        <div class="mt-4 rounded-lg bg-indigo-50 p-4 ring-1 ring-indigo-200">
+          <p class="text-xs text-indigo-500 uppercase tracking-wide font-semibold mb-1">Seat Assignment</p>
+          <p class="text-lg font-bold text-indigo-900"><%= @ticket.seat_label %></p>
+        </div>
+      <% end %>
+
       <!-- Barcode -->
       <div class="mt-6 text-center border-t pt-6">
         <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Barcode</p>

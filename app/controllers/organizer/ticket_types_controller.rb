@@ -52,7 +52,8 @@ module Organizer
 
     def ticket_type_params
       params.require(:ticket_type).permit(:name, :description, :price, :quantity,
-                                          :max_per_order, :sale_starts_at, :sale_ends_at)
+                                          :max_per_order, :sale_starts_at, :sale_ends_at,
+                                          :section_id)
     end
   end
 end

@@ -116,7 +116,7 @@
                 <div class="flex items-center justify-between">
                   <span class="text-sm font-semibold text-gray-900"><%= ticket.ticket_type.name %></span>
                   <% ticket_status_classes = case ticket.status
-                       when "valid" then "bg-green-50 text-green-700 ring-green-600/20"
+                       when "active" then "bg-green-50 text-green-700 ring-green-600/20"
                        when "used" then "bg-gray-50 text-gray-700 ring-gray-600/20"
                        when "cancelled" then "bg-red-50 text-red-700 ring-red-600/20"
                        else "bg-gray-50 text-gray-700 ring-gray-600/20"
@@ -125,6 +125,14 @@
                     <%= ticket.status.capitalize %>
                   </span>
                 </div>
+                <% if ticket.seat_label.present? %>
+                  <div class="mt-2 flex items-center gap-1.5 text-sm text-indigo-700">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                    <span class="font-medium"><%= ticket.seat_label %></span>
+                  </div>
+                <% end %>
                 <div class="mt-3 rounded-lg bg-gray-50 p-3 text-center">
                   <p class="font-mono text-sm font-bold tracking-widest text-gray-700"><%= ticket.barcode %></p>
                 </div>

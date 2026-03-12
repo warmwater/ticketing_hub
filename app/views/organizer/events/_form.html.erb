@@ -73,6 +73,29 @@
     </div>
   </div>
 
+  <%# Seating Configuration %>
+  <% if event.venue.present? && event.venue.has_seating? %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-6">Seating Configuration</h2>
+
+      <div class="space-y-4">
+        <div>
+          <%= f.label :seat_selection_mode, "Seat Selection Mode", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.select :seat_selection_mode,
+              [["None (no assigned seating)", "none"],
+               ["Customer picks seats", "customer_pick"],
+               ["Auto-assign seats", "auto_assign"]],
+              {}, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+          <p class="mt-1 text-xs text-gray-500">
+            <strong>None:</strong> Standard ticket sales without seat assignments.
+            <strong>Customer picks:</strong> Buyers choose their own seats from a seat map.
+            <strong>Auto-assign:</strong> Seats are assigned automatically at checkout.
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <%# Waiting Room Settings %>
   <div class="bg-white rounded-lg shadow p-6">
     <h2 class="text-lg font-semibold text-gray-900 mb-6">Waiting Room Settings</h2>

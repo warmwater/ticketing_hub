@@ -50,6 +50,109 @@
     </div>
   </div>
 
+  <!-- Seating Layout -->
+  <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-900">Seating Layout</h2>
+      <span class="text-sm text-gray-500"><%= @sections.size %> section(s)</span>
+    </div>
+
+    <div class="p-6 space-y-6">
+      <% if @sections.any? %>
+        <div class="space-y-4">
+          <% @sections.each do |section| %>
+            <div class="rounded-lg border border-gray-200 p-4">
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+                <div class="flex items-center gap-3">
+                  <h3 class="font-semibold text-gray-900"><%= section.name %></h3>
+                  <% if section.general_admission? %>
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">GA</span>
+                  <% else %>
+                    <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20">Seated</span>
+                  <% end %>
+                  <span class="text-sm text-gray-500">Capacity: <%= section.capacity %></span>
+                  <% if section.seated? && section.seats.any? %>
+                    <span class="text-sm text-gray-500">(<%= section.active_seats.count %> seats)</span>
+                  <% end %>
+                </div>
+                <div class="flex items-center gap-2">
+                  <% if section.seated? && section.seats.empty? %>
+                    <%= form_with url: generate_seats_admin_venue_section_path(@venue, section), method: :post, class: "flex items-center gap-2" do %>
+                      <%= text_field_tag :row_labels, nil, placeholder: "A,B,C,D", size: 12, class: "rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+                      <%= number_field_tag :seats_per_row, 10, min: 1, max: 100, class: "w-16 rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+                      <button type="submit" class="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500">Generate Seats</button>
+                    <% end %>
+                  <% end %>
+                  <%= link_to "Delete", admin_venue_section_path(@venue, section),
+                      data: { turbo_method: :delete, turbo_confirm: "Remove section '#{section.name}'?" },
+                      class: "text-sm text-red-600 hover:text-red-900 font-medium" %>
+                </div>
+              </div>
+
+              <% if section.seated? && section.seats.any? %>
+                <div class="mt-3 overflow-x-auto">
+                  <div class="inline-block rounded-lg bg-gray-50 p-3">
+                    <div class="mb-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Stage</div>
+                    <div class="border-t border-gray-300 mb-3"></div>
+                    <% section.rows.each do |row_label, seats| %>
+                      <div class="flex items-center gap-0.5 mb-0.5">
+                        <span class="w-6 text-center text-xs font-bold text-gray-500"><%= row_label %></span>
+                        <% seats.each do |seat| %>
+                          <div class="h-5 w-5 rounded text-center text-[10px] leading-5 font-medium
+                            <%= seat.active? ? 'bg-emerald-500 text-white' : 'bg-gray-300 text-gray-500' %>">
+                            <%= seat.seat_number %>
+                          </div>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-sm text-gray-500">No sections configured. Add sections below to set up seating.</p>
+      <% end %>
+
+      <%# Add section form %>
+      <div class="rounded-lg border-2 border-dashed border-gray-300 p-4" data-controller="venue-section-form">
+        <h3 class="text-sm font-semibold text-gray-700 mb-3">Add Section</h3>
+        <%= form_with model: Section.new, url: admin_venue_sections_path(@venue), method: :post, class: "space-y-3" do |f| %>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <%= f.label :name, "Name", class: "block text-xs font-medium text-gray-600" %>
+              <%= f.text_field :name, placeholder: "e.g. Orchestra, Balcony", required: true,
+                  class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+            </div>
+            <div>
+              <%= f.label :section_type, "Type", class: "block text-xs font-medium text-gray-600" %>
+              <%= f.select :section_type, [["General Admission", "general_admission"], ["Seated", "seated"]],
+                  {}, { class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+                        data: { action: "change->venue-section-form#toggle", venue_section_form_target: "typeSelect" } } %>
+            </div>
+            <div data-venue-section-form-target="gaFields">
+              <%= f.label :capacity, "Capacity", class: "block text-xs font-medium text-gray-600" %>
+              <%= f.number_field :capacity, min: 1, placeholder: "500", required: true,
+                  class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+            </div>
+            <div class="hidden" data-venue-section-form-target="seatedFields">
+              <label class="block text-xs font-medium text-gray-600">Capacity (placeholder)</label>
+              <input type="number" name="section[capacity]" value="1" min="1"
+                     class="mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                     data-venue-section-form-target="seatedCapacity">
+              <p class="mt-0.5 text-[10px] text-gray-400">Updated automatically after generating seats.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <%= f.hidden_field :position, value: @sections.size %>
+            <%= f.submit "Add Section", class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 cursor-pointer" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <!-- Events at this Venue -->
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-200">

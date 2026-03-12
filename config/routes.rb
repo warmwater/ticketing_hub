@@ -10,7 +10,11 @@ Rails.application.routes.draw do
     resource :waiting_room, only: [:show, :create, :destroy], controller: "waiting_rooms" do
       get :status
     end
-    resources :orders, only: [:new, :create]
+    resources :orders, only: [:new, :create] do
+      collection do
+        get :select_seats
+      end
+    end
   end
 
   resources :orders, only: [:index, :show]
@@ -22,7 +26,13 @@ Rails.application.routes.draw do
   # Admin namespace
   namespace :admin do
     root "dashboard#index"
-    resources :venues
+    resources :venues do
+      resources :sections, only: [:create, :update, :destroy], controller: "venue_sections" do
+        member do
+          post :generate_seats
+        end
+      end
+    end
     resources :users do
       member do
         patch :update_role

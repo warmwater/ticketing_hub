@@ -116,7 +116,17 @@
   <%# Ticket Types Section %>
   <div class="bg-white rounded-lg shadow mb-8">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h2 class="text-lg font-semibold text-gray-900">Ticket Types</h2>
+      <div>
+        <h2 class="text-lg font-semibold text-gray-900">Ticket Types</h2>
+        <% if @event.seated_event? %>
+          <p class="text-xs text-gray-500 mt-0.5">
+            Seating mode:
+            <span class="font-medium text-indigo-600">
+              <%= @event.seating_customer_pick? ? "Customer picks seats" : "Auto-assign" %>
+            </span>
+          </p>
+        <% end %>
+      </div>
       <%= link_to new_organizer_event_ticket_type_path(@event), class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition" do %>
         <svg class="h-4 w-4 mr-1.5 -ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -129,6 +139,9 @@
         <thead class="bg-gray-50">
           <tr>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <% if @sections.present? %>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section</th>
+            <% end %>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sold</th>
@@ -142,6 +155,20 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 <%= ticket_type.name %>
               </td>
+              <% if @sections.present? %>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <% if ticket_type.section %>
+                    <span class="inline-flex items-center gap-1">
+                      <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset
+                        <%= ticket_type.section.general_admission? ? 'bg-blue-50 text-blue-700 ring-blue-600/20' : 'bg-purple-50 text-purple-700 ring-purple-600/20' %>">
+                        <%= ticket_type.section.name %>
+                      </span>
+                    </span>
+                  <% else %>
+                    <span class="text-gray-400">&mdash;</span>
+                  <% end %>
+                </td>
+              <% end %>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <%= number_to_currency(ticket_type.price) %>
               </td>
@@ -169,6 +196,109 @@
       </div>
     <% end %>
   </div>
+
+  <%# Seating Layout %>
+  <% if @sections.present? %>
+    <div class="bg-white rounded-lg shadow mb-8">
+      <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <svg class="h-5 w-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+          <h2 class="text-lg font-semibold text-gray-900">Seating Layout</h2>
+        </div>
+        <span class="text-sm text-gray-500"><%= @sections.size %> section(s)</span>
+      </div>
+
+      <div class="p-6">
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center gap-4 text-sm mb-5">
+          <div class="flex items-center gap-1.5">
+            <div class="h-4 w-4 rounded bg-emerald-500 ring-1 ring-emerald-600"></div>
+            <span class="text-gray-600">Available</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="h-4 w-4 rounded bg-rose-500 ring-1 ring-rose-600"></div>
+            <span class="text-gray-600">Sold</span>
+          </div>
+        </div>
+
+        <div class="space-y-5">
+          <% @sections.each do |section| %>
+            <div class="rounded-xl border border-gray-200 p-5">
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-3">
+                  <h3 class="font-semibold text-gray-900"><%= section.name %></h3>
+                  <% if section.general_admission? %>
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">GA</span>
+                  <% else %>
+                    <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20">Seated</span>
+                  <% end %>
+                </div>
+
+                <% if section.general_admission? %>
+                  <% available_ga = section.available_capacity_for_event(@event) %>
+                  <% sold_ga = section.capacity - available_ga %>
+                  <div class="text-sm">
+                    <span class="font-semibold text-gray-900"><%= sold_ga %></span>
+                    <span class="text-gray-500">/ <%= section.capacity %> sold</span>
+                  </div>
+                <% else %>
+                  <% available_seats = section.available_seats_for_event(@event) %>
+                  <% total_seats = section.active_seats.count %>
+                  <% sold_seats = total_seats - available_seats.count %>
+                  <div class="text-sm">
+                    <span class="font-semibold text-gray-900"><%= sold_seats %></span>
+                    <span class="text-gray-500">/ <%= total_seats %> sold</span>
+                  </div>
+                <% end %>
+              </div>
+
+              <% if section.seated? && section.seats.any? %>
+                <% available_seat_ids = section.available_seats_for_event(@event).pluck(:id) %>
+                <div class="overflow-x-auto">
+                  <div class="inline-block rounded-lg bg-gray-50 p-4 min-w-fit">
+                    <!-- Stage indicator -->
+                    <div class="mb-3 text-center">
+                      <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600">Stage</div>
+                    </div>
+
+                    <% section.rows.each do |row_label, seats| %>
+                      <div class="flex items-center gap-0.5 mb-0.5">
+                        <span class="w-6 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
+                        <% seats.each do |seat| %>
+                          <% available = available_seat_ids.include?(seat.id) %>
+                          <div class="h-5 w-5 rounded text-center text-[10px] leading-5 font-medium
+                            <%= available ? 'bg-emerald-500 text-white ring-1 ring-emerald-600' : 'bg-rose-500 text-white ring-1 ring-rose-600' %>"
+                               title="<%= available ? 'Available' : 'Sold' %> — Row <%= seat.row_label %>, Seat <%= seat.seat_number %>">
+                            <%= seat.seat_number %>
+                          </div>
+                        <% end %>
+                        <span class="w-6 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% elsif section.general_admission? %>
+                <% available_ga = section.available_capacity_for_event(@event) %>
+                <% sold_ga = section.capacity - available_ga %>
+                <% pct = section.capacity > 0 ? (sold_ga.to_f / section.capacity * 100).round : 0 %>
+                <div class="mt-2">
+                  <div class="h-3 w-full rounded-full bg-gray-200 overflow-hidden">
+                    <div class="h-full rounded-full <%= pct >= 90 ? 'bg-red-500' : pct >= 70 ? 'bg-amber-500' : 'bg-green-500' %>" style="width: <%= pct %>%"></div>
+                  </div>
+                  <div class="mt-1 flex items-center justify-between text-xs text-gray-500">
+                    <span><%= pct %>% sold</span>
+                    <span><%= available_ga %> remaining</span>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <%# Recent Orders %>
   <div class="bg-white rounded-lg shadow">

@@ -1,5 +1,6 @@
 class TicketType < ApplicationRecord
   belongs_to :event
+  belongs_to :section, optional: true
   has_many :order_items, dependent: :restrict_with_error
   has_many :tickets, through: :order_items
 
@@ -14,7 +15,19 @@ class TicketType < ApplicationRecord
   }
 
   def available_quantity
-    quantity - tickets.where(status: [:active, :used]).count
+    base = quantity - tickets.where(status: [:active, :used]).count
+
+    if section.present?
+      if section.general_admission?
+        [base, section.available_capacity_for_event(event)].min
+      elsif section.seated?
+        [base, section.available_seats_for_event(event).count].min
+      else
+        base
+      end
+    else
+      base
+    end
   end
 
   def available?
