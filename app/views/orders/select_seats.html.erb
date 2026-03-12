@@ -1,5 +1,7 @@
 <%# Seat Selection - Customer Pick Flow %>
 
+<%= turbo_stream_from "event_#{@event.id}_seats" %>
+
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
   <!-- Back Link -->
   <div class="mb-6">
@@ -68,10 +70,10 @@
                     <% seats.each do |seat| %>
                       <% taken = sel[:taken_seat_ids].include?(seat.id) %>
                       <% if taken %>
-                        <div class="h-7 w-7 rounded cursor-not-allowed bg-slate-400 text-white text-center text-xs leading-7 font-medium"
-                             title="Taken"><%= seat.seat_number %></div>
+                        <%= render "orders/taken_seat", seat: seat %>
                       <% else %>
                         <button type="button"
+                                id="seat_<%= seat.id %>"
                                 class="seat-btn h-7 w-7 rounded bg-emerald-500 text-white text-center text-xs leading-7 font-medium ring-1 ring-emerald-600 hover:bg-emerald-400 transition cursor-pointer"
                                 data-action="click->seat-picker#toggleSeat"
                                 data-seat-id="<%= seat.id %>"

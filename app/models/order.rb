@@ -49,6 +49,20 @@ class Order < ApplicationRecord
     end
   end
 
+  def broadcast_taken_seats
+    seated_tickets = tickets.includes(:seat).where.not(seat_id: nil)
+    return if seated_tickets.empty?
+
+    seated_tickets.each do |ticket|
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "event_#{event_id}_seats",
+        target: "seat_#{ticket.seat_id}",
+        partial: "orders/taken_seat",
+        locals: { seat: ticket.seat }
+      )
+    end
+  end
+
   private
 
   def generate_reference_number

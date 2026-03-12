@@ -16,7 +16,38 @@ export default class extends Controller {
       this.selections[ttId] = new Set()
     })
 
+    // Watch for Turbo Stream replacements (live seat updates from other buyers)
+    this.observer = new MutationObserver((mutations) => {
+      let needsUpdate = false
+
+      for (const mutation of mutations) {
+        for (const removedNode of mutation.removedNodes) {
+          if (removedNode.nodeType !== Node.ELEMENT_NODE) continue
+          const seatId = removedNode.dataset?.seatId
+          const ttId = removedNode.dataset?.ticketTypeId
+          if (seatId && ttId && this.selections[ttId]?.has(seatId)) {
+            this.selections[ttId].delete(seatId)
+            needsUpdate = true
+          }
+        }
+      }
+
+      if (needsUpdate) {
+        this.updateUI()
+        this.showSeatTakenNotice()
+      }
+    })
+
+    this.observer.observe(this.element, { childList: true, subtree: true })
+
     this.updateUI()
+  }
+
+  disconnect() {
+    if (this.observer) {
+      this.observer.disconnect()
+      this.observer = null
+    }
   }
 
   toggleSeat(event) {
@@ -84,5 +115,16 @@ export default class extends Controller {
       this.statusTarget.classList.remove("text-green-600", "font-medium")
       this.statusTarget.classList.add("text-gray-500")
     }
+  }
+
+  showSeatTakenNotice() {
+    const notice = document.createElement("div")
+    notice.className = "fixed top-4 right-4 z-50 rounded-lg bg-amber-100 border border-amber-300 px-4 py-3 text-sm text-amber-800 shadow-lg transition-opacity duration-500"
+    notice.textContent = "A seat you selected was just taken by another buyer. Please choose a different seat."
+    document.body.appendChild(notice)
+    setTimeout(() => {
+      notice.classList.add("opacity-0")
+      setTimeout(() => notice.remove(), 500)
+    }, 4000)
   }
 }

@@ -67,6 +67,7 @@ class OrdersController < ApplicationController
       end
 
       @order.generate_tickets!(seat_assignments)
+      @order.broadcast_taken_seats
 
       # Mark waiting room entry as completed and clear middleware cookies
       entry = @event.waiting_room_entries.find_by(user: current_user)
@@ -159,6 +160,7 @@ class OrdersController < ApplicationController
     if @order.save
       @order.update!(status: :confirmed)
       @order.generate_tickets!(seat_assignments)
+      @order.broadcast_taken_seats
 
       # Mark waiting room entry as completed and clear middleware cookies
       entry = @event.waiting_room_entries.find_by(user: current_user)
