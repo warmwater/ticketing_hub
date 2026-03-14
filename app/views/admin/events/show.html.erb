@@ -39,7 +39,7 @@
       </div>
       <div>
         <dt class="text-sm text-gray-500"><%= t("admin.events.show.dates") %></dt>
-        <dd class="font-medium"><%= @event.starts_at.strftime("%b %d, %Y %I:%M %p") %> &mdash; <%= @event.ends_at.strftime("%b %d, %Y %I:%M %p") %></dd>
+        <dd class="font-medium"><%= l(@event.starts_at, format: :with_time) %> &mdash; <%= l(@event.ends_at, format: :with_time) %></dd>
       </div>
       <div class="md:col-span-2">
         <dt class="text-sm text-gray-500"><%= t("admin.events.show.description") %></dt>
@@ -231,7 +231,7 @@
                 </span>
               </td>
               <td class="py-3"><%= number_to_currency(order.total_amount) %></td>
-              <td class="py-3"><%= order.created_at.strftime("%b %d, %Y") %></td>
+              <td class="py-3"><%= l(order.created_at, format: :short) %></td>
             </tr>
           <% end %>
         </tbody>

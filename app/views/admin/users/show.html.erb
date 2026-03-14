@@ -39,7 +39,7 @@
         </div>
         <div>
           <dt class="text-sm font-medium text-gray-500"><%= t("admin.users.show.joined") %></dt>
-          <dd class="mt-1 text-sm text-gray-900"><%= @user.created_at.strftime("%B %d, %Y") %></dd>
+          <dd class="mt-1 text-sm text-gray-900"><%= l(@user.created_at, format: :long) %></dd>
         </div>
       </dl>
     </div>

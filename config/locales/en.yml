@@ -1,4 +1,22 @@
 en:
+  date:
+    formats:
+      short: "%b %d, %Y"
+      long: "%B %d, %Y"
+      full: "%A, %B %d, %Y"
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+  time:
+    formats:
+      short: "%b %d, %Y"
+      long: "%B %d, %Y"
+      full: "%A, %B %d, %Y"
+      with_time: "%b %d, %Y %I:%M %p"
+      time_only: "%I:%M %p"
+      datetime_long: "%B %d, %Y at %I:%M %p"
+
   # Shared / Layout
   shared:
     navbar:

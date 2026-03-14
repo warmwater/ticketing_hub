@@ -31,7 +31,7 @@
               </span>
             </td>
             <td class="px-6 py-4"><%= number_to_currency(order.total_amount) %></td>
-            <td class="px-6 py-4 text-gray-500"><%= order.created_at.strftime("%b %d, %Y") %></td>
+            <td class="px-6 py-4 text-gray-500"><%= l(order.created_at, format: :short) %></td>
             <td class="px-6 py-4">
               <%= link_to t("organizer.orders.index.view"), organizer_order_path(order), class: "text-indigo-600 hover:text-indigo-800" %>
             </td>

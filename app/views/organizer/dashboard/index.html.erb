@@ -73,7 +73,7 @@
               <div>
                 <%= link_to event.name, organizer_event_path(event), class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
                 <p class="text-sm text-gray-500 mt-1">
-                  <%= event.starts_at.strftime("%B %d, %Y at %I:%M %p") %>
+                  <%= l(event.starts_at, format: :datetime_long) %>
                   <% if event.venue %>
                     &middot; <%= event.venue.name %>
                   <% end %>
@@ -142,7 +142,7 @@
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <%= event.starts_at.strftime("%b %d, %Y") %>
+                <%= l(event.starts_at, format: :short) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <%= event.tickets_sold %>

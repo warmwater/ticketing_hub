@@ -21,7 +21,7 @@
         </div>
         <div>
           <p class="text-xs text-gray-500 uppercase tracking-wide"><%= t("tickets.show.time") %></p>
-          <p class="font-medium"><%= @ticket.event.starts_at.strftime("%I:%M %p") %></p>
+          <p class="font-medium"><%= l(@ticket.event.starts_at, format: :time_only) %></p>
         </div>
         <div>
           <p class="text-xs text-gray-500 uppercase tracking-wide"><%= t("tickets.show.attendee") %></p>

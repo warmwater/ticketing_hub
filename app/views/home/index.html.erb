@@ -68,7 +68,7 @@
               </div>
               <div class="absolute bottom-3 left-3">
                 <span class="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-sm font-medium text-indigo-700 backdrop-blur-sm">
-                  <%= event.starts_at.strftime("%b %d, %Y") %>
+                  <%= l(event.starts_at, format: :short) %>
                 </span>
               </div>
             </div>

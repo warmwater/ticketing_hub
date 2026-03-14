@@ -62,7 +62,7 @@
                     <%= t("statuses.#{event.status}") %>
                   </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= event.starts_at&.strftime("%b %d, %Y") %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= event.starts_at ? l(event.starts_at, format: :short) : "" %></td>
               </tr>
             <% end %>
           </tbody>
@@ -107,7 +107,7 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= number_to_currency(order.total_amount) %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= order.created_at.strftime("%b %d, %Y") %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= l(order.created_at, format: :short) %></td>
               </tr>
             <% end %>
           </tbody>
