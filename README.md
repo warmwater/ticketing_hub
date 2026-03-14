@@ -2,7 +2,21 @@
 
 A full-featured event ticketing platform built with **Rails 8.1** and **Tailwind CSS v4**. TicketHub supports event creation, venue management with configurable seating layouts, a real-time waiting room system, and full internationalization (English, Traditional Chinese, Japanese).
 
-**Just a fun project to test the capability of Claude Code**
+**Just a fun project to test the capability of Claude Code, everything is created by Claude, including this README.md**
+
+## Screenshots
+
+### Event Listings & Language Switcher
+![i18n Language Switcher](public/screenshots/i18n_switcher.gif)
+*Switch between English, 繁體中文, and 日本語 in one click — all UI text and date formats update instantly.*
+
+### Venue Seating Layout (Admin)
+![Seating Layout](public/screenshots/seating_layout.gif)
+*Admins configure multi-section venues with seated rows (e.g. Front Row 2×10, Main Floor 6×10) or General Admission areas.*
+
+### Interactive Seat Picker (Buyer)
+![Seat Picker](public/screenshots/seat_picker.gif)
+*Buyers pick individual seats in real time — available seats in green, already-taken seats in gray, selected seats in indigo.*
 
 ## Features
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head><title>Save Screenshot</title></head>
+<body>
+<h2>Drop screenshot here</h2>
+<div id="drop" style="width:800px;height:600px;border:3px dashed #999;display:flex;align-items:center;justify-content:center;font-size:24px;color:#999;">
+  Drop image here
+</div>
+<input type="file" id="fileInput" accept="image/*" style="margin:20px 0;font-size:18px;">
+<canvas id="canvas" style="display:none;"></canvas>
+<script>
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('fileInput');
+let counter = 1;
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const a = document.createElement('a');
+    a.href = e.target.result;
+    a.download = 'screenshot_' + counter + '.png';
+    a.click();
+    counter++;
+    drop.textContent = 'Saved! Drop another...';
+  };
+  reader.readAsDataURL(file);
+}
+
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = '#4CAF50'; });
+drop.addEventListener('dragleave', e => { drop.style.borderColor = '#999'; });
+drop.addEventListener('drop', e => {
+  e.preventDefault();
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+</script>
+</body>
+</html>
