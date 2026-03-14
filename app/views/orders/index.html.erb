@@ -2,8 +2,8 @@
 
 <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
   <div class="mb-8">
-    <h1 class="text-3xl font-bold tracking-tight text-gray-900">My Orders</h1>
-    <p class="mt-2 text-gray-600">View and manage your event orders</p>
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900"><%= t("orders.index.title") %></h1>
+    <p class="mt-2 text-gray-600"><%= t("orders.index.subtitle") %></p>
   </div>
 
   <% if @orders.any? %>
@@ -12,11 +12,11 @@
       <table class="w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Reference</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Event</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Date</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Status</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Total</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.index.reference") %></th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.index.event") %></th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.index.date") %></th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.index.status") %></th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.index.total") %></th>
             <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
           </tr>
         </thead>
@@ -25,7 +25,7 @@
             <tr class="hover:bg-gray-50 transition">
               <td class="px-6 py-4 font-mono text-sm font-semibold text-gray-900"><%= order.reference_number %></td>
               <td class="px-4 py-4 text-sm font-medium text-gray-900"><%= order.event.name %></td>
-              <td class="px-4 py-4 text-sm text-gray-500"><%= order.created_at.strftime("%b %d, %Y") %></td>
+              <td class="px-4 py-4 text-sm text-gray-500"><%= l(order.created_at, format: :short) rescue order.created_at.strftime("%b %d, %Y") %></td>
               <td class="px-4 py-4">
                 <% status_classes = case order.status
                      when "confirmed" then "bg-green-50 text-green-700 ring-green-600/20"
@@ -34,12 +34,12 @@
                      else "bg-gray-50 text-gray-700 ring-gray-600/20"
                    end %>
                 <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset <%= status_classes %>">
-                  <%= order.status.capitalize %>
+                  <%= t("statuses.#{order.status}") %>
                 </span>
               </td>
               <td class="px-4 py-4 text-right text-sm font-semibold text-gray-900"><%= number_to_currency(order.total_amount) %></td>
               <td class="px-6 py-4 text-right">
-                <%= link_to "View", order_path(order),
+                <%= link_to t("orders.index.view"), order_path(order),
                     class: "inline-flex items-center rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition hover:bg-indigo-100" %>
               </td>
             </tr>
@@ -66,11 +66,11 @@
                      else "bg-gray-50 text-gray-700 ring-gray-600/20"
                    end %>
                 <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ring-inset <%= status_classes %>">
-                  <%= order.status.capitalize %>
+                  <%= t("statuses.#{order.status}") %>
                 </span>
               </div>
               <div class="mt-3 flex items-center justify-between text-sm">
-                <span class="text-gray-500"><%= order.created_at.strftime("%b %d, %Y") %></span>
+                <span class="text-gray-500"><%= l(order.created_at, format: :short) rescue order.created_at.strftime("%b %d, %Y") %></span>
                 <span class="font-bold text-indigo-600"><%= number_to_currency(order.total_amount) %></span>
               </div>
             </div>
@@ -84,10 +84,10 @@
       <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
       </svg>
-      <h3 class="mt-4 text-lg font-semibold text-gray-900">No orders yet</h3>
-      <p class="mt-2 text-gray-500">When you purchase tickets, your orders will appear here.</p>
+      <h3 class="mt-4 text-lg font-semibold text-gray-900"><%= t("orders.index.no_orders") %></h3>
+      <p class="mt-2 text-gray-500"><%= t("orders.index.no_orders_hint") %></p>
       <div class="mt-6">
-        <%= link_to "Browse Events", events_path,
+        <%= link_to t("orders.index.browse_events"), events_path,
             class: "inline-flex items-center rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition" %>
       </div>
     </div>

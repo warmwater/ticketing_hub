@@ -1,7 +1,7 @@
 <div class="max-w-lg mx-auto px-4 py-12">
   <div class="text-center mb-8">
     <h1 class="text-2xl font-bold text-gray-900"><%= @event.name %></h1>
-    <p class="text-gray-500 mt-1">Virtual Waiting Room</p>
+    <p class="text-gray-500 mt-1"><%= t("waiting_rooms.show.virtual_waiting_room") %></p>
   </div>
 
   <% if @entry.nil? || @entry.left? || @entry.expired? %>
@@ -12,12 +12,12 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       </div>
-      <h2 class="text-xl font-semibold text-gray-900 mb-2">High demand event!</h2>
-      <p class="text-gray-600 mb-6">This event has a virtual waiting room. Join the queue and we'll let you in when it's your turn to purchase tickets.</p>
-      <p class="text-sm text-gray-500 mb-6"><%= @event.users_in_waiting_room %> people currently waiting</p>
+      <h2 class="text-xl font-semibold text-gray-900 mb-2"><%= t("waiting_rooms.show.high_demand") %></h2>
+      <p class="text-gray-600 mb-6"><%= t("waiting_rooms.show.join_hint") %></p>
+      <p class="text-sm text-gray-500 mb-6"><%= t("waiting_rooms.show.people_waiting", count: @event.users_in_waiting_room) %></p>
 
       <%= form_with url: event_waiting_room_path(@event), method: :post, class: "inline" do %>
-        <%= submit_tag "Join Waiting Room", class: "bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition cursor-pointer text-lg" %>
+        <%= submit_tag t("waiting_rooms.show.join_button"), class: "bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition cursor-pointer text-lg" %>
       <% end %>
     </div>
 
@@ -33,7 +33,7 @@
     </div>
 
     <div class="mt-6 text-center">
-      <%= link_to "Leave Queue", event_waiting_room_path(@event), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to leave the queue?" }, class: "text-red-600 hover:text-red-800 text-sm font-medium" %>
+      <%= link_to t("waiting_rooms.show.leave_queue"), event_waiting_room_path(@event), data: { turbo_method: :delete, turbo_confirm: t("waiting_rooms.show.leave_confirm") }, class: "text-red-600 hover:text-red-800 text-sm font-medium" %>
     </div>
 
   <% elsif @entry.admitted? && !@entry.admission_expired? %>
@@ -48,6 +48,6 @@
   <% end %>
 
   <div class="mt-8 text-center">
-    <%= link_to "Back to Event", event_path(@event), class: "text-gray-500 hover:text-gray-700 text-sm" %>
+    <%= link_to t("waiting_rooms.show.back_to_event"), event_path(@event), class: "text-gray-500 hover:text-gray-700 text-sm" %>
   </div>
 </div>

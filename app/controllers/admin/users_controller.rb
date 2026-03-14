@@ -16,7 +16,7 @@ module Admin
 
     def update
       if @user.update(user_params)
-        redirect_to admin_user_path(@user), notice: "User updated."
+        redirect_to admin_user_path(@user), notice: t("flash.admin.user_updated")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -24,9 +24,9 @@ module Admin
 
     def update_role
       if @user.update(role: params[:role])
-        redirect_to admin_user_path(@user), notice: "Role updated to #{@user.role}."
+        redirect_to admin_user_path(@user), notice: t("flash.admin.role_updated", role: @user.role)
       else
-        redirect_to admin_user_path(@user), alert: "Failed to update role."
+        redirect_to admin_user_path(@user), alert: t("flash.admin.role_update_failed")
       end
     end
 

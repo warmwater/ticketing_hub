@@ -7,7 +7,7 @@ module Admin
       @section = @venue.sections.build(section_params)
 
       if @section.save
-        redirect_to admin_venue_path(@venue), notice: "Section '#{@section.name}' added."
+        redirect_to admin_venue_path(@venue), notice: t("flash.admin.section_added", name: @section.name)
       else
         redirect_to admin_venue_path(@venue), alert: @section.errors.full_messages.join(", ")
       end
@@ -15,7 +15,7 @@ module Admin
 
     def update
       if @section.update(section_params)
-        redirect_to admin_venue_path(@venue), notice: "Section updated."
+        redirect_to admin_venue_path(@venue), notice: t("flash.admin.section_updated")
       else
         redirect_to admin_venue_path(@venue), alert: @section.errors.full_messages.join(", ")
       end
@@ -23,7 +23,7 @@ module Admin
 
     def destroy
       if @section.destroy
-        redirect_to admin_venue_path(@venue), notice: "Section removed."
+        redirect_to admin_venue_path(@venue), notice: t("flash.admin.section_removed")
       else
         redirect_to admin_venue_path(@venue), alert: @section.errors.full_messages.join(", ")
       end
@@ -34,7 +34,7 @@ module Admin
       seats_per_row = params[:seats_per_row].to_i
 
       if row_labels.empty? || seats_per_row <= 0
-        redirect_to admin_venue_path(@venue), alert: "Please provide row labels and seats per row."
+        redirect_to admin_venue_path(@venue), alert: t("flash.admin.provide_seat_info")
         return
       end
 
@@ -47,7 +47,7 @@ module Admin
       end
 
       @section.update!(capacity: @section.active_seats.count)
-      redirect_to admin_venue_path(@venue), notice: "#{@section.active_seats.count} seats generated for '#{@section.name}'."
+      redirect_to admin_venue_path(@venue), notice: t("flash.admin.seats_generated", count: @section.active_seats.count, name: @section.name)
     end
 
     private

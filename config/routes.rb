@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
 
+  # Language switcher
+  patch "locale", to: "locale#update"
+
   root "home#index"
 
   # Public event browsing

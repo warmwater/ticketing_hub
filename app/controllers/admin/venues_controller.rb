@@ -20,7 +20,7 @@ module Admin
       @venue.created_by = current_user
 
       if @venue.save
-        redirect_to admin_venue_path(@venue), notice: "Venue created successfully."
+        redirect_to admin_venue_path(@venue), notice: t("flash.admin.venue_created")
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ module Admin
 
     def update
       if @venue.update(venue_params)
-        redirect_to admin_venue_path(@venue), notice: "Venue updated successfully."
+        redirect_to admin_venue_path(@venue), notice: t("flash.admin.venue_updated")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -39,7 +39,7 @@ module Admin
 
     def destroy
       if @venue.destroy
-        redirect_to admin_venues_path, notice: "Venue deleted."
+        redirect_to admin_venues_path, notice: t("flash.admin.venue_deleted")
       else
         redirect_to admin_venue_path(@venue), alert: @venue.errors.full_messages.join(", ")
       end

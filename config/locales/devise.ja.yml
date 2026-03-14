@@ -1,0 +1,63 @@
+ja:
+  devise:
+    confirmations:
+      confirmed: "メールアドレスが確認されました。"
+      send_instructions: "確認メールを数分以内にお送りします。"
+      send_paranoid_instructions: "メールアドレスが登録されている場合、確認メールを数分以内にお送りします。"
+    failure:
+      already_authenticated: "すでにログインしています。"
+      inactive: "アカウントがまだ有効化されていません。"
+      invalid: "%{authentication_keys}またはパスワードが無効です。"
+      locked: "アカウントがロックされています。"
+      last_attempt: "あと1回の試行でアカウントがロックされます。"
+      not_found_in_database: "%{authentication_keys}またはパスワードが無効です。"
+      timeout: "セッションの有効期限が切れました。もう一度ログインしてください。"
+      unauthenticated: "続行するにはログインまたは新規登録が必要です。"
+      unconfirmed: "続行する前にメールアドレスを確認してください。"
+    mailer:
+      confirmation_instructions:
+        subject: "メールアドレスの確認"
+      reset_password_instructions:
+        subject: "パスワードリセットのご案内"
+      unlock_instructions:
+        subject: "アカウントロック解除のご案内"
+      email_changed:
+        subject: "メールアドレスの変更"
+      password_change:
+        subject: "パスワードの変更"
+    omniauth_callbacks:
+      failure: "%{kind}での認証に失敗しました。理由：「%{reason}」"
+      success: "%{kind}アカウントでの認証に成功しました。"
+    passwords:
+      no_token: "パスワードリセットメールからのアクセスが必要です。パスワードリセットメールからアクセスしている場合は、URLが完全であることを確認してください。"
+      send_instructions: "パスワードリセットの手順を記載したメールを数分以内にお送りします。"
+      send_paranoid_instructions: "メールアドレスが登録されている場合、パスワードリセットリンクを数分以内にお送りします。"
+      updated: "パスワードが正常に変更されました。ログインしました。"
+      updated_not_active: "パスワードが正常に変更されました。"
+    registrations:
+      destroyed: "アカウントが正常に削除されました。またのご利用をお待ちしております。"
+      signed_up: "ようこそ！新規登録が完了しました。"
+      signed_up_but_inactive: "新規登録が完了しましたが、アカウントが有効化されていないためログインできません。"
+      signed_up_but_locked: "新規登録が完了しましたが、アカウントがロックされているためログインできません。"
+      signed_up_but_unconfirmed: "確認リンクを記載したメールをお送りしました。リンクをクリックしてアカウントを有効化してください。"
+      update_needs_confirmation: "アカウントが正常に更新されましたが、新しいメールアドレスの確認が必要です。メールを確認し、確認リンクをクリックしてください。"
+      updated: "アカウントが正常に更新されました。"
+      updated_but_not_signed_in: "アカウントが正常に更新されましたが、パスワードが変更されたため、再度ログインが必要です。"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      already_signed_out: "ログアウトしました。"
+    unlocks:
+      send_instructions: "アカウントロック解除の手順を記載したメールを数分以内にお送りします。"
+      send_paranoid_instructions: "アカウントが存在する場合、ロック解除の手順を記載したメールを数分以内にお送りします。"
+      unlocked: "アカウントのロックが解除されました。ログインして続行してください。"
+  errors:
+    messages:
+      already_confirmed: "はすでに確認済みです。ログインしてください"
+      confirmation_period_expired: "は%{period}以内に確認する必要があります。新しいものをリクエストしてください"
+      expired: "の有効期限が切れました。新しいものをリクエストしてください"
+      not_found: "は見つかりませんでした"
+      not_locked: "はロックされていません"
+      not_saved:
+        one: "1件のエラーにより、この%{resource}を保存できませんでした："
+        other: "%{count}件のエラーにより、この%{resource}を保存できませんでした："

@@ -15,7 +15,7 @@ module Organizer
       @ticket_type = @event.ticket_types.build(ticket_type_params)
 
       if @ticket_type.save
-        redirect_to organizer_event_path(@event), notice: "Ticket type created."
+        redirect_to organizer_event_path(@event), notice: t("flash.organizer.ticket_type_created")
       else
         render :new, status: :unprocessable_entity
       end
@@ -26,7 +26,7 @@ module Organizer
 
     def update
       if @ticket_type.update(ticket_type_params)
-        redirect_to organizer_event_path(@event), notice: "Ticket type updated."
+        redirect_to organizer_event_path(@event), notice: t("flash.organizer.ticket_type_updated")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -34,7 +34,7 @@ module Organizer
 
     def destroy
       if @ticket_type.destroy
-        redirect_to organizer_event_path(@event), notice: "Ticket type deleted."
+        redirect_to organizer_event_path(@event), notice: t("flash.organizer.ticket_type_deleted")
       else
         redirect_to organizer_event_path(@event), alert: @ticket_type.errors.full_messages.join(", ")
       end

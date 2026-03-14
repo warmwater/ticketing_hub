@@ -9,31 +9,38 @@
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
-      Back to Event
+      <%= t("orders.select_seats.back_to_event") %>
     <% end %>
   </div>
 
   <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-200">
     <div class="border-b border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
-      <h1 class="text-xl font-bold text-gray-900">Choose Your Seats</h1>
+      <h1 class="text-xl font-bold text-gray-900"><%= t("orders.select_seats.title") %></h1>
       <p class="mt-1 text-sm text-gray-500"><%= @event.name %></p>
     </div>
 
-    <%= form_with url: event_orders_path(@event), method: :post, data: { controller: "seat-picker", turbo_frame: "_top" } do |f| %>
+    <%= form_with url: event_orders_path(@event), method: :post, data: {
+          controller: "seat-picker",
+          turbo_frame: "_top",
+          seat_picker_all_selected_text_value: t("orders.select_seats.all_selected"),
+          seat_picker_select_more_text_value: t("orders.select_seats.select_more"),
+          seat_picker_select_seats_hint_text_value: t("orders.select_seats.select_seats_hint"),
+          seat_picker_seat_taken_notice_text_value: t("orders.select_seats.seat_taken_notice")
+        } do |f| %>
       <div class="p-6 sm:p-8 space-y-8">
         <!-- Legend -->
         <div class="flex flex-wrap items-center gap-4 text-sm">
           <div class="flex items-center gap-1.5">
             <div class="h-5 w-5 rounded bg-emerald-500 ring-1 ring-emerald-600"></div>
-            <span class="text-gray-600">Available</span>
+            <span class="text-gray-600"><%= t("orders.select_seats.available") %></span>
           </div>
           <div class="flex items-center gap-1.5">
             <div class="h-5 w-5 rounded bg-indigo-500 ring-1 ring-indigo-600"></div>
-            <span class="text-gray-600">Selected</span>
+            <span class="text-gray-600"><%= t("orders.select_seats.selected") %></span>
           </div>
           <div class="flex items-center gap-1.5">
             <div class="h-5 w-5 rounded bg-slate-400 ring-1 ring-slate-500"></div>
-            <span class="text-gray-600">Taken</span>
+            <span class="text-gray-600"><%= t("orders.select_seats.taken") %></span>
           </div>
         </div>
 
@@ -51,7 +58,7 @@
               </div>
               <div class="rounded-full bg-indigo-50 px-3 py-1 ring-1 ring-indigo-200">
                 <span class="text-sm font-semibold text-indigo-700">
-                  Select <span data-seat-picker-target="counter" data-counter-for="<%= sel[:ticket_type].id %>">0</span> / <%= sel[:quantity] %> seats
+                  <%= t("orders.select_seats.select_counter", selected: '<span data-seat-picker-target="counter" data-counter-for="' + sel[:ticket_type].id.to_s + '">0</span>', total: sel[:quantity]).html_safe %>
                 </span>
               </div>
             </div>
@@ -61,7 +68,7 @@
               <div class="inline-block rounded-lg bg-gray-50 p-4 min-w-fit">
                 <!-- Stage indicator -->
                 <div class="mb-3 text-center">
-                  <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600">Stage</div>
+                  <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600"><%= t("orders.select_seats.stage") %></div>
                 </div>
 
                 <% sel[:all_seats].group_by(&:row_label).each do |row_label, seats| %>
@@ -106,8 +113,8 @@
       <!-- Submit -->
       <div class="border-t border-gray-200 bg-gray-50 px-6 py-4 sm:px-8">
         <div class="flex items-center justify-between">
-          <p class="text-sm text-gray-500" data-seat-picker-target="status">Select your seats to continue</p>
-          <%= f.submit "Confirm Seats & Place Order",
+          <p class="text-sm text-gray-500" data-seat-picker-target="status"><%= t("orders.select_seats.select_seats_hint") %></p>
+          <%= f.submit t("orders.select_seats.confirm_seats"),
               disabled: true,
               data: { seat_picker_target: "submitBtn" },
               class: "rounded-lg bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" %>

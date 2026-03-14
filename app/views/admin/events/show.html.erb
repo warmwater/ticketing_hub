@@ -3,12 +3,12 @@
     <h1 class="text-2xl font-bold text-gray-900"><%= @event.name %></h1>
     <div class="flex gap-2">
       <% if @event.draft? %>
-        <%= link_to "Publish", publish_admin_event_path(@event), data: { turbo_method: :patch, turbo_confirm: "Publish this event?" }, class: "bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm" %>
+        <%= link_to t("admin.events.show.publish"), publish_admin_event_path(@event), data: { turbo_method: :patch, turbo_confirm: t("admin.events.show.publish_confirm") }, class: "bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm" %>
       <% end %>
       <% unless @event.cancelled? %>
-        <%= link_to "Cancel Event", cancel_admin_event_path(@event), data: { turbo_method: :patch, turbo_confirm: "Cancel this event?" }, class: "bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm" %>
+        <%= link_to t("admin.events.show.cancel_event"), cancel_admin_event_path(@event), data: { turbo_method: :patch, turbo_confirm: t("admin.events.show.cancel_confirm") }, class: "bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm" %>
       <% end %>
-      <%= link_to "Edit", edit_admin_event_path(@event), class: "bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm" %>
+      <%= link_to t("admin.events.show.edit"), edit_admin_event_path(@event), class: "bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm" %>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
   <div class="bg-white rounded-xl shadow p-6">
     <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <dt class="text-sm text-gray-500">Status</dt>
+        <dt class="text-sm text-gray-500"><%= t("admin.events.show.status") %></dt>
         <dd class="mt-1">
           <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium
             <%= case @event.status
@@ -25,29 +25,29 @@
                 when 'cancelled' then 'bg-red-100 text-red-800'
                 when 'completed' then 'bg-blue-100 text-blue-800'
                 end %>">
-            <%= @event.status.capitalize %>
+            <%= t("statuses.#{@event.status}") %>
           </span>
         </dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Organizer</dt>
+        <dt class="text-sm text-gray-500"><%= t("admin.events.show.organizer") %></dt>
         <dd class="font-medium"><%= @event.organizer.name %></dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Venue</dt>
+        <dt class="text-sm text-gray-500"><%= t("admin.events.show.venue") %></dt>
         <dd class="font-medium"><%= @event.venue.name %></dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Dates</dt>
+        <dt class="text-sm text-gray-500"><%= t("admin.events.show.dates") %></dt>
         <dd class="font-medium"><%= @event.starts_at.strftime("%b %d, %Y %I:%M %p") %> &mdash; <%= @event.ends_at.strftime("%b %d, %Y %I:%M %p") %></dd>
       </div>
       <div class="md:col-span-2">
-        <dt class="text-sm text-gray-500">Description</dt>
+        <dt class="text-sm text-gray-500"><%= t("admin.events.show.description") %></dt>
         <dd class="mt-1 text-gray-700"><%= @event.description %></dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Waiting Room</dt>
-        <dd class="font-medium"><%= @event.waiting_room_enabled? ? "Enabled (capacity: #{@event.waiting_room_capacity})" : "Disabled" %></dd>
+        <dt class="text-sm text-gray-500"><%= t("admin.events.show.waiting_room") %></dt>
+        <dd class="font-medium"><%= @event.waiting_room_enabled? ? t("admin.events.show.waiting_room_enabled", capacity: @event.waiting_room_capacity) : t("admin.events.show.waiting_room_disabled") %></dd>
       </div>
     </dl>
   </div>
@@ -55,10 +55,10 @@
   <!-- Ticket Types -->
   <div class="bg-white rounded-xl shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-semibold text-gray-900">Ticket Types</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t("admin.events.show.ticket_types") %></h2>
       <% if @event.seated_event? %>
         <span class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-600/20">
-          <%= @event.seating_customer_pick? ? "Customer picks seats" : "Auto-assign seats" %>
+          <%= @event.seating_customer_pick? ? t("admin.events.show.customer_picks") : t("admin.events.show.auto_assign") %>
         </span>
       <% end %>
     </div>
@@ -66,14 +66,14 @@
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b text-left text-gray-500">
-            <th class="pb-2">Name</th>
+            <th class="pb-2"><%= t("admin.events.show.name") %></th>
             <% if @sections.present? %>
-              <th class="pb-2">Section</th>
+              <th class="pb-2"><%= t("admin.events.show.section") %></th>
             <% end %>
-            <th class="pb-2">Price</th>
-            <th class="pb-2">Quantity</th>
-            <th class="pb-2">Sold</th>
-            <th class="pb-2">Available</th>
+            <th class="pb-2"><%= t("admin.events.show.price") %></th>
+            <th class="pb-2"><%= t("admin.events.show.quantity") %></th>
+            <th class="pb-2"><%= t("admin.events.show.sold") %></th>
+            <th class="pb-2"><%= t("admin.events.show.available") %></th>
           </tr>
         </thead>
         <tbody>
@@ -101,7 +101,7 @@
         </tbody>
       </table>
     <% else %>
-      <p class="text-gray-500">No ticket types defined.</p>
+      <p class="text-gray-500"><%= t("admin.events.show.no_ticket_types") %></p>
     <% end %>
   </div>
 
@@ -113,20 +113,20 @@
           <svg class="h-5 w-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
           </svg>
-          <h2 class="text-lg font-semibold text-gray-900">Seating Layout</h2>
+          <h2 class="text-lg font-semibold text-gray-900"><%= t("admin.events.show.seating_layout") %></h2>
         </div>
-        <span class="text-sm text-gray-500"><%= @sections.size %> section(s)</span>
+        <span class="text-sm text-gray-500"><%= t("admin.events.show.sections_count", count: @sections.size) %></span>
       </div>
 
       <!-- Legend -->
       <div class="flex flex-wrap items-center gap-4 text-sm mb-5">
         <div class="flex items-center gap-1.5">
           <div class="h-5 w-5 rounded bg-emerald-500 ring-1 ring-emerald-600"></div>
-          <span class="text-gray-600">Available</span>
+          <span class="text-gray-600"><%= t("admin.events.show.available") %></span>
         </div>
         <div class="flex items-center gap-1.5">
           <div class="h-5 w-5 rounded bg-rose-500 ring-1 ring-rose-600"></div>
-          <span class="text-gray-600">Sold</span>
+          <span class="text-gray-600"><%= t("admin.events.show.sold") %></span>
         </div>
       </div>
 
@@ -137,9 +137,9 @@
               <div class="flex items-center gap-3">
                 <h3 class="font-semibold text-gray-900"><%= section.name %></h3>
                 <% if section.general_admission? %>
-                  <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">GA</span>
+                  <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20"><%= t("admin.events.show.ga") %></span>
                 <% else %>
-                  <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20">Seated</span>
+                  <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20"><%= t("admin.events.show.seated") %></span>
                 <% end %>
               </div>
 
@@ -166,7 +166,7 @@
               <div class="overflow-x-auto">
                 <div class="inline-block rounded-lg bg-gray-50 p-4 min-w-fit">
                   <div class="mb-3 text-center">
-                    <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600">Stage</div>
+                    <div class="inline-block rounded-t-xl bg-gray-300 px-12 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-600"><%= t("admin.events.show.stage") %></div>
                   </div>
 
                   <% section.rows.each do |row_label, seats| %>
@@ -176,7 +176,7 @@
                         <% available = available_seat_ids.include?(seat.id) %>
                         <div class="h-7 w-7 rounded text-center text-xs leading-7 font-medium
                           <%= available ? 'bg-emerald-500 text-white ring-1 ring-emerald-600' : 'bg-rose-500 text-white ring-1 ring-rose-600' %>"
-                             title="<%= available ? 'Available' : 'Sold' %> — Row <%= seat.row_label %>, Seat <%= seat.seat_number %>">
+                             title="<%= available ? t('admin.events.show.available') : t('admin.events.show.sold') %> — Row <%= seat.row_label %>, Seat <%= seat.seat_number %>">
                           <%= seat.seat_number %>
                         </div>
                       <% end %>
@@ -207,16 +207,16 @@
 
   <!-- Recent Orders -->
   <div class="bg-white rounded-xl shadow p-6">
-    <h2 class="text-lg font-semibold mb-4">Recent Orders</h2>
+    <h2 class="text-lg font-semibold mb-4"><%= t("admin.events.show.recent_orders") %></h2>
     <% if @orders.any? %>
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b text-left text-gray-500">
-            <th class="pb-2">Reference</th>
-            <th class="pb-2">User</th>
-            <th class="pb-2">Status</th>
-            <th class="pb-2">Total</th>
-            <th class="pb-2">Date</th>
+            <th class="pb-2"><%= t("admin.events.show.reference") %></th>
+            <th class="pb-2"><%= t("admin.events.show.user") %></th>
+            <th class="pb-2"><%= t("admin.events.show.order_status") %></th>
+            <th class="pb-2"><%= t("admin.events.show.total") %></th>
+            <th class="pb-2"><%= t("admin.events.show.date") %></th>
           </tr>
         </thead>
         <tbody>
@@ -227,7 +227,7 @@
               <td class="py-3">
                 <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium
                   <%= order.confirmed? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
-                  <%= order.status.capitalize %>
+                  <%= t("statuses.#{order.status}") %>
                 </span>
               </td>
               <td class="py-3"><%= number_to_currency(order.total_amount) %></td>
@@ -237,7 +237,7 @@
         </tbody>
       </table>
     <% else %>
-      <p class="text-gray-500">No orders yet.</p>
+      <p class="text-gray-500"><%= t("admin.events.show.no_orders") %></p>
     <% end %>
   </div>
 </div>

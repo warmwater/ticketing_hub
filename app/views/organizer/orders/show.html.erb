@@ -1,44 +1,44 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-gray-900">Order <%= @order.reference_number %></h1>
-    <%= link_to "&larr; Back to Orders".html_safe, organizer_orders_path, class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t("organizer.orders.show.title") %> <%= @order.reference_number %></h1>
+    <%= link_to "&larr; #{t('organizer.orders.show.back')}".html_safe, organizer_orders_path, class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
   </div>
 
   <div class="bg-white rounded-xl shadow p-6">
     <dl class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div>
-        <dt class="text-sm text-gray-500">Event</dt>
+        <dt class="text-sm text-gray-500"><%= t("organizer.orders.show.event") %></dt>
         <dd class="font-medium"><%= @order.event.name %></dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Buyer</dt>
+        <dt class="text-sm text-gray-500"><%= t("organizer.orders.show.buyer") %></dt>
         <dd class="font-medium"><%= @order.user.name %><br><span class="text-sm text-gray-500"><%= @order.user.email %></span></dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Status</dt>
+        <dt class="text-sm text-gray-500"><%= t("organizer.orders.show.status") %></dt>
         <dd>
           <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium
             <%= @order.confirmed? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
-            <%= @order.status.capitalize %>
+            <%= t("statuses.#{@order.status}") %>
           </span>
         </dd>
       </div>
       <div>
-        <dt class="text-sm text-gray-500">Total</dt>
+        <dt class="text-sm text-gray-500"><%= t("organizer.orders.show.total") %></dt>
         <dd class="text-lg font-bold text-indigo-600"><%= number_to_currency(@order.total_amount) %></dd>
       </div>
     </dl>
   </div>
 
   <div class="bg-white rounded-xl shadow p-6">
-    <h2 class="text-lg font-semibold mb-4">Order Items</h2>
+    <h2 class="text-lg font-semibold mb-4"><%= t("organizer.orders.show.order_items") %></h2>
     <table class="w-full text-sm">
       <thead>
         <tr class="border-b text-left text-gray-500">
-          <th class="pb-2">Ticket Type</th>
-          <th class="pb-2">Qty</th>
-          <th class="pb-2">Unit Price</th>
-          <th class="pb-2">Subtotal</th>
+          <th class="pb-2"><%= t("organizer.orders.show.ticket_type") %></th>
+          <th class="pb-2"><%= t("organizer.orders.show.qty") %></th>
+          <th class="pb-2"><%= t("organizer.orders.show.unit_price") %></th>
+          <th class="pb-2"><%= t("organizer.orders.show.subtotal") %></th>
         </tr>
       </thead>
       <tbody>
@@ -55,7 +55,7 @@
   </div>
 
   <div class="bg-white rounded-xl shadow p-6">
-    <h2 class="text-lg font-semibold mb-4">Tickets</h2>
+    <h2 class="text-lg font-semibold mb-4"><%= t("organizer.orders.show.tickets") %></h2>
     <div class="space-y-2">
       <% @order.order_items.each do |item| %>
         <% item.tickets.each do |ticket| %>
@@ -68,7 +68,7 @@
               <code class="text-xs bg-gray-100 px-2 py-1 rounded"><%= ticket.barcode %></code>
               <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium
                 <%= ticket.active? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
-                <%= ticket.status.capitalize %>
+                <%= t("statuses.#{ticket.status}") %>
               </span>
             </div>
           </div>

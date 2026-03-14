@@ -2,7 +2,7 @@
 <%# Locals: form (form builder), event (Event record), purge_path (lambda for purge URL) %>
 
 <div data-controller="file-upload" data-file-upload-multiple-value="true" class="space-y-3">
-  <label class="block text-sm font-medium text-gray-700">Photos & Videos</label>
+  <label class="block text-sm font-medium text-gray-700"><%= t("shared.media.photos_videos") %></label>
 
   <% if event.media.attached? %>
     <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-4">
@@ -23,9 +23,9 @@
             </div>
           <% end %>
 
-          <%= link_to "Remove",
+          <%= link_to t("shared.media.remove"),
               purge_path.call(event, attachment_id: file.id),
-              data: { turbo_method: :delete, turbo_confirm: "Remove this file?" },
+              data: { turbo_method: :delete, turbo_confirm: t("shared.media.remove_confirm") },
               class: "absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition shadow" %>
         </div>
       <% end %>
@@ -40,9 +40,9 @@
             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
     </svg>
     <p class="mt-2 text-sm text-gray-600">
-      <span class="font-medium text-indigo-600">Click to upload</span> or drag and drop
+      <span class="font-medium text-indigo-600"><%= t("shared.media.click_upload") %></span> <%= t("shared.media.or_drag") %>
     </p>
-    <p class="mt-1 text-xs text-gray-500">Images (JPEG, PNG, GIF, WebP up to 10MB) or Videos (MP4, WebM, MOV up to 100MB)</p>
+    <p class="mt-1 text-xs text-gray-500"><%= t("shared.media.media_formats") %></p>
   </div>
 
   <%= form.file_field :media,

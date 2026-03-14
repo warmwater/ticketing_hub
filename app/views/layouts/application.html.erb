@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full bg-gray-50">
+<html class="h-full bg-gray-50" lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || "TicketHub" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -51,16 +51,16 @@
               <span class="text-lg font-bold tracking-tight">TicketHub</span>
             </div>
             <div class="mt-4 flex items-center gap-6 md:mt-0">
-              <%= link_to "Events", events_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
-              <%= link_to "About", "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
-              <%= link_to "Contact", "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
-              <%= link_to "Privacy", "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
-              <%= link_to "Terms", "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
+              <%= link_to t("shared.footer.events"), events_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+              <%= link_to t("shared.footer.about"), "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
+              <%= link_to t("shared.footer.contact"), "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
+              <%= link_to t("shared.footer.privacy"), "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
+              <%= link_to t("shared.footer.terms"), "#", class: "text-sm text-gray-500 hover:text-gray-700" %>
             </div>
           </div>
           <div class="mt-6 border-t border-gray-100 pt-6">
             <p class="text-center text-xs text-gray-400">
-              &copy; <%= Date.current.year %> TicketHub. All rights reserved.
+              <%= t("shared.footer.copyright_html", year: Date.current.year) %>
             </p>
           </div>
         </div>

@@ -7,15 +7,15 @@
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
-      Back to My Orders
+      <%= t("orders.show.back_to_orders") %>
     <% end %>
   </div>
 
   <!-- Order Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Order Details</h1>
-      <p class="mt-1 text-gray-500">Reference: <span class="font-mono font-semibold text-gray-900"><%= @order.reference_number %></span></p>
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900"><%= t("orders.show.title") %></h1>
+      <p class="mt-1 text-gray-500"><%= t("orders.show.reference", ref: @order.reference_number) %></p>
     </div>
     <div>
       <% status_classes = case @order.status
@@ -25,7 +25,7 @@
            else "bg-gray-50 text-gray-700 ring-gray-600/20"
          end %>
       <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ring-1 ring-inset <%= status_classes %>">
-        <%= @order.status.capitalize %>
+        <%= t("statuses.#{@order.status}") %>
       </span>
     </div>
   </div>
@@ -41,7 +41,7 @@
       <div>
         <h2 class="text-lg font-bold text-white"><%= @order.event.name %></h2>
         <p class="text-sm text-indigo-200">
-          <%= @order.event.starts_at.strftime("%A, %B %d, %Y") %>
+          <%= l(@order.event.starts_at, format: :long) rescue @order.event.starts_at.strftime("%A, %B %d, %Y") %>
           &middot; <%= @order.event.venue&.name %>
         </p>
       </div>
@@ -49,17 +49,17 @@
 
     <!-- Order Items Table -->
     <div class="p-6">
-      <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">Order Items</h3>
+      <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.show.order_items") %></h3>
 
       <!-- Desktop Table -->
       <div class="hidden overflow-hidden rounded-lg ring-1 ring-gray-200 sm:block">
         <table class="w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Ticket Type</th>
-              <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">Qty</th>
-              <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Unit Price</th>
-              <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Subtotal</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.show.ticket_type") %></th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.show.qty") %></th>
+              <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.show.unit_price") %></th>
+              <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.show.subtotal") %></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
@@ -74,7 +74,7 @@
           </tbody>
           <tfoot class="bg-gray-50">
             <tr>
-              <td colspan="3" class="px-4 py-3 text-right text-sm font-bold text-gray-900">Total</td>
+              <td colspan="3" class="px-4 py-3 text-right text-sm font-bold text-gray-900"><%= t("orders.show.total") %></td>
               <td class="px-4 py-3 text-right text-lg font-extrabold text-indigo-600"><%= number_to_currency(@order.total_amount) %></td>
             </tr>
           </tfoot>
@@ -95,7 +95,7 @@
           </div>
         <% end %>
         <div class="flex items-center justify-between rounded-lg bg-gray-50 p-4">
-          <span class="text-lg font-bold text-gray-900">Total</span>
+          <span class="text-lg font-bold text-gray-900"><%= t("orders.show.total") %></span>
           <span class="text-xl font-extrabold text-indigo-600"><%= number_to_currency(@order.total_amount) %></span>
         </div>
       </div>
@@ -105,8 +105,8 @@
   <!-- Tickets -->
   <% if @order.tickets.any? %>
     <div class="mt-8">
-      <h2 class="text-xl font-bold text-gray-900">Your Tickets</h2>
-      <p class="mt-1 text-sm text-gray-500">Each ticket has a unique barcode for entry</p>
+      <h2 class="text-xl font-bold text-gray-900"><%= t("orders.show.your_tickets") %></h2>
+      <p class="mt-1 text-sm text-gray-500"><%= t("orders.show.tickets_hint") %></p>
 
       <div class="mt-4 grid gap-4 sm:grid-cols-2">
         <% @order.tickets.each do |ticket| %>
@@ -122,7 +122,7 @@
                        else "bg-gray-50 text-gray-700 ring-gray-600/20"
                      end %>
                   <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset <%= ticket_status_classes %>">
-                    <%= ticket.status.capitalize %>
+                    <%= t("statuses.#{ticket.status}") %>
                   </span>
                 </div>
                 <% if ticket.seat_label.present? %>

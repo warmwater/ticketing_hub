@@ -1,26 +1,26 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
-  <h1 class="text-2xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+  <h1 class="text-2xl font-bold text-gray-900 mb-6"><%= t("admin.dashboard.title") %></h1>
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
     <div class="bg-white rounded-lg shadow p-5 border-t-4 border-indigo-500">
-      <p class="text-sm font-medium text-gray-500">Total Users</p>
+      <p class="text-sm font-medium text-gray-500"><%= t("admin.dashboard.total_users") %></p>
       <p class="mt-1 text-3xl font-bold text-gray-900"><%= @total_users %></p>
     </div>
     <div class="bg-white rounded-lg shadow p-5 border-t-4 border-indigo-500">
-      <p class="text-sm font-medium text-gray-500">Total Events</p>
+      <p class="text-sm font-medium text-gray-500"><%= t("admin.dashboard.total_events") %></p>
       <p class="mt-1 text-3xl font-bold text-gray-900"><%= @total_events %></p>
     </div>
     <div class="bg-white rounded-lg shadow p-5 border-t-4 border-indigo-500">
-      <p class="text-sm font-medium text-gray-500">Total Venues</p>
+      <p class="text-sm font-medium text-gray-500"><%= t("admin.dashboard.total_venues") %></p>
       <p class="mt-1 text-3xl font-bold text-gray-900"><%= @total_venues %></p>
     </div>
     <div class="bg-white rounded-lg shadow p-5 border-t-4 border-indigo-500">
-      <p class="text-sm font-medium text-gray-500">Total Orders</p>
+      <p class="text-sm font-medium text-gray-500"><%= t("admin.dashboard.total_orders") %></p>
       <p class="mt-1 text-3xl font-bold text-gray-900"><%= @total_orders %></p>
     </div>
     <div class="bg-white rounded-lg shadow p-5 border-t-4 border-indigo-500">
-      <p class="text-sm font-medium text-gray-500">Active Tickets</p>
+      <p class="text-sm font-medium text-gray-500"><%= t("admin.dashboard.active_tickets") %></p>
       <p class="mt-1 text-3xl font-bold text-gray-900"><%= @total_tickets %></p>
     </div>
   </div>
@@ -29,17 +29,17 @@
     <!-- Recent Events -->
     <div class="bg-white rounded-lg shadow">
       <div class="px-6 py-4 border-b border-gray-200">
-        <h2 class="text-lg font-semibold text-gray-900">Recent Events</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t("admin.dashboard.recent_events") %></h2>
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizer</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venue</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.name") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.organizer") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.venue") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.status") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.date") %></th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -59,7 +59,7 @@
                     else "bg-gray-100 text-gray-800"
                   end %>
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= status_classes %>">
-                    <%= event.status.capitalize %>
+                    <%= t("statuses.#{event.status}") %>
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= event.starts_at&.strftime("%b %d, %Y") %></td>
@@ -73,18 +73,18 @@
     <!-- Recent Orders -->
     <div class="bg-white rounded-lg shadow">
       <div class="px-6 py-4 border-b border-gray-200">
-        <h2 class="text-lg font-semibold text-gray-900">Recent Orders</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t("admin.dashboard.recent_orders") %></h2>
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.reference") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.user") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.event") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.status") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.amount") %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.dashboard.date") %></th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -103,7 +103,7 @@
                     else "bg-gray-100 text-gray-800"
                   end %>
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= order_status_classes %>">
-                    <%= order.status.capitalize %>
+                    <%= t("statuses.#{order.status}") %>
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= number_to_currency(order.total_amount) %></td>

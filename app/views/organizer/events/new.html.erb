@@ -4,11 +4,11 @@
       <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
-      Back to Events
+      <%= t("organizer.events.show.back") %>
     <% end %>
   </div>
 
-  <h1 class="text-3xl font-bold text-gray-900 mb-8">Create New Event</h1>
+  <h1 class="text-3xl font-bold text-gray-900 mb-8"><%= t("organizer.events.new.title") %></h1>
 
   <%= render "form", event: @event %>
 </div>

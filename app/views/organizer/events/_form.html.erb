@@ -8,7 +8,7 @@
         </svg>
         <div class="ml-3">
           <h3 class="text-sm font-medium text-red-800">
-            <%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:
+            <%= t("organizer.events.form.errors_title", count: event.errors.count) %>
           </h3>
           <ul class="mt-2 list-disc list-inside text-sm text-red-700 space-y-1">
             <% event.errors.full_messages.each do |message| %>
@@ -22,46 +22,46 @@
 
   <%# Basic Details %>
   <div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-6">Event Details</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-6"><%= t("organizer.events.form.event_details") %></h2>
 
     <div class="space-y-6">
       <div>
-        <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :name, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "Enter event name" %>
+        <%= f.label :name, t("organizer.events.form.name"), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :name, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t("organizer.events.form.name_placeholder") %>
       </div>
 
       <div>
-        <%= f.label :description, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_area :description, rows: 4, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "Describe your event" %>
+        <%= f.label :description, t("organizer.events.form.description"), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_area :description, rows: 4, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t("organizer.events.form.description_placeholder") %>
       </div>
 
       <div>
-        <%= f.label :venue_id, "Venue", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.collection_select :venue_id, @venues, :id, :name, { prompt: "Select a venue", selected: event.venue_id }, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+        <%= f.label :venue_id, t("organizer.events.form.venue"), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.collection_select :venue_id, @venues, :id, :name, { prompt: t("organizer.events.form.select_venue"), selected: event.venue_id }, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <%= f.label :starts_at, "Start Date & Time", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.label :starts_at, t("organizer.events.form.starts_at"), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= f.datetime_local_field :starts_at, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
         </div>
 
         <div>
-          <%= f.label :ends_at, "End Date & Time", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.label :ends_at, t("organizer.events.form.ends_at"), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= f.datetime_local_field :ends_at, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
         </div>
       </div>
 
       <div>
-        <%= f.label :max_tickets_per_order, "Max Tickets Per Order", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.number_field :max_tickets_per_order, min: 1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "e.g. 10" %>
+        <%= f.label :max_tickets_per_order, t("organizer.events.form.max_tickets"), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :max_tickets_per_order, min: 1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t("organizer.events.form.max_tickets_placeholder") %>
       </div>
     </div>
   </div>
 
   <%# Media Uploads %>
   <div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-6">Event Media</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-6"><%= t("organizer.events.form.media_uploads") %></h2>
 
     <div class="space-y-8">
       <%= render "shared/cover_image_field", form: f, event: event %>
@@ -76,20 +76,20 @@
   <%# Seating Configuration %>
   <% if event.venue.present? && event.venue.has_seating? %>
     <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-6">Seating Configuration</h2>
+      <h2 class="text-lg font-semibold text-gray-900 mb-6"><%= t("organizer.events.form.seating_config") %></h2>
 
       <div class="space-y-4">
         <div>
-          <%= f.label :seat_selection_mode, "Seat Selection Mode", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.label :seat_selection_mode, t("organizer.events.form.seat_selection_mode"), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= f.select :seat_selection_mode,
-              [["None (no assigned seating)", "none"],
-               ["Customer picks seats", "customer_pick"],
-               ["Auto-assign seats", "auto_assign"]],
+              [[t("organizer.events.form.mode_none"), "none"],
+               [t("organizer.events.form.mode_customer"), "customer_pick"],
+               [t("organizer.events.form.mode_auto"), "auto_assign"]],
               {}, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
           <p class="mt-1 text-xs text-gray-500">
-            <strong>None:</strong> Standard ticket sales without seat assignments.
-            <strong>Customer picks:</strong> Buyers choose their own seats from a seat map.
-            <strong>Auto-assign:</strong> Seats are assigned automatically at checkout.
+            <strong><%= t("organizer.events.form.mode_none") %>:</strong> <%= t("organizer.events.form.mode_none_hint") %>
+            <strong><%= t("organizer.events.form.mode_customer") %>:</strong> <%= t("organizer.events.form.mode_customer_hint") %>
+            <strong><%= t("organizer.events.form.mode_auto") %>:</strong> <%= t("organizer.events.form.mode_auto_hint") %>
           </p>
         </div>
       </div>
@@ -98,7 +98,7 @@
 
   <%# Waiting Room Settings %>
   <div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-6">Waiting Room Settings</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-6"><%= t("organizer.events.form.waiting_room") %></h2>
 
     <div class="space-y-6">
       <div class="flex items-start">
@@ -106,22 +106,22 @@
           <%= f.check_box :waiting_room_enabled, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
         </div>
         <div class="ml-3">
-          <%= f.label :waiting_room_enabled, "Enable Waiting Room", class: "text-sm font-medium text-gray-700" %>
-          <p class="text-sm text-gray-500">Users will be placed in a queue before they can purchase tickets.</p>
+          <%= f.label :waiting_room_enabled, t("organizer.events.form.enable_wr"), class: "text-sm font-medium text-gray-700" %>
+          <p class="text-sm text-gray-500"><%= t("organizer.events.form.wr_description") %></p>
         </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <%= f.label :waiting_room_capacity, "Waiting Room Capacity", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.number_field :waiting_room_capacity, min: 1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "e.g. 100" %>
-          <p class="mt-1 text-xs text-gray-500">Maximum number of users allowed in the waiting room.</p>
+          <%= f.label :waiting_room_capacity, t("organizer.events.form.wr_capacity"), class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.number_field :waiting_room_capacity, min: 1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t("organizer.events.form.wr_capacity_placeholder") %>
+          <p class="mt-1 text-xs text-gray-500"><%= t("organizer.events.form.wr_capacity_hint") %></p>
         </div>
 
         <div>
-          <%= f.label :waiting_room_admission_minutes, "Admission Window (minutes)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.number_field :waiting_room_admission_minutes, min: 1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "e.g. 15" %>
-          <p class="mt-1 text-xs text-gray-500">Time window users have to complete their purchase after being admitted.</p>
+          <%= f.label :waiting_room_admission_minutes, t("organizer.events.form.wr_admission"), class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.number_field :waiting_room_admission_minutes, min: 1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t("organizer.events.form.wr_admission_placeholder") %>
+          <p class="mt-1 text-xs text-gray-500"><%= t("organizer.events.form.wr_admission_hint") %></p>
         </div>
       </div>
     </div>
@@ -129,7 +129,7 @@
 
   <%# Form Actions %>
   <div class="flex items-center justify-end space-x-4">
-    <%= link_to "Cancel", organizer_events_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition" %>
-    <%= f.submit class: "inline-flex items-center px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition cursor-pointer" %>
+    <%= link_to t("organizer.events.form.cancel"), organizer_events_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition" %>
+    <%= f.submit t("organizer.events.form.save_event"), class: "inline-flex items-center px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition cursor-pointer" %>
   </div>
 <% end %>

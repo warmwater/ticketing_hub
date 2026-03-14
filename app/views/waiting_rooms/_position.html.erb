@@ -9,12 +9,12 @@
     </div>
   </div>
 
-  <h2 class="text-xl font-semibold text-gray-900 mb-2">You're in the queue!</h2>
+  <h2 class="text-xl font-semibold text-gray-900 mb-2"><%= t("waiting_rooms.position.in_queue") %></h2>
 
   <div class="my-6">
-    <p class="text-sm text-gray-500 uppercase tracking-wide">Your Position</p>
+    <p class="text-sm text-gray-500 uppercase tracking-wide"><%= t("waiting_rooms.position.your_position") %></p>
     <p class="text-5xl font-bold text-indigo-600 my-2" data-waiting-room-target="position"><%= position %></p>
-    <p class="text-sm text-gray-500">of <span data-waiting-room-target="total"><%= total %></span> in queue</p>
+    <p class="text-sm text-gray-500"><%= t("waiting_rooms.position.of_total", total: '<span data-waiting-room-target="total">' + total.to_s + '</span>').html_safe %></p>
   </div>
 
   <!-- Progress indicator -->
@@ -23,5 +23,5 @@
     <div class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: <%= progress %>%"></div>
   </div>
 
-  <p class="text-sm text-gray-500">Please keep this page open. You'll be automatically redirected when it's your turn.</p>
+  <p class="text-sm text-gray-500"><%= t("waiting_rooms.position.keep_open") %></p>
 </div>

@@ -1,49 +1,49 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mb-6">
-    <%= link_to "&larr; Back to Venues".html_safe, admin_venues_path, class: "text-indigo-600 hover:text-indigo-900 text-sm font-medium" %>
+    <%= link_to ("&larr; " + t("admin.venues.show.back")).html_safe, admin_venues_path, class: "text-indigo-600 hover:text-indigo-900 text-sm font-medium" %>
   </div>
 
   <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
       <h1 class="text-2xl font-bold text-gray-900"><%= @venue.name %></h1>
       <div class="flex items-center space-x-3">
-        <%= link_to "Edit", edit_admin_venue_path(@venue), class: "inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition" %>
-        <%= link_to "Delete", admin_venue_path(@venue), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this venue?" }, class: "inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition" %>
+        <%= link_to t("admin.venues.show.edit"), edit_admin_venue_path(@venue), class: "inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition" %>
+        <%= link_to t("admin.venues.show.delete"), admin_venue_path(@venue), data: { turbo_method: :delete, turbo_confirm: t("admin.venues.show.delete_confirm") }, class: "inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition" %>
       </div>
     </div>
 
     <div class="px-6 py-5">
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
         <div>
-          <dt class="text-sm font-medium text-gray-500">Name</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.name") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.name %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Address</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.address") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.address %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">City</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.city") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.city %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">State</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.state") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.state %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Country</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.country") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.country %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Capacity</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.capacity") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= number_with_delimiter(@venue.capacity) %></dd>
         </div>
         <div class="sm:col-span-2">
-          <dt class="text-sm font-medium text-gray-500">Description</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.description") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.description %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Created By</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t("admin.venues.show.created_by") %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= @venue.created_by&.name %></dd>
         </div>
       </dl>
@@ -53,8 +53,8 @@
   <!-- Seating Layout -->
   <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h2 class="text-lg font-semibold text-gray-900">Seating Layout</h2>
-      <span class="text-sm text-gray-500"><%= @sections.size %> section(s)</span>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t("admin.venues.show.seating_layout") %></h2>
+      <span class="text-sm text-gray-500"><%= t("admin.venues.show.sections_count", count: @sections.size) %></span>
     </div>
 
     <div class="p-6 space-y-6">
@@ -66,13 +66,13 @@
                 <div class="flex items-center gap-3">
                   <h3 class="font-semibold text-gray-900"><%= section.name %></h3>
                   <% if section.general_admission? %>
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">GA</span>
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20"><%= t("admin.venues.show.ga") %></span>
                   <% else %>
-                    <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20">Seated</span>
+                    <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20"><%= t("admin.venues.show.seated") %></span>
                   <% end %>
-                  <span class="text-sm text-gray-500">Capacity: <%= section.capacity %></span>
+                  <span class="text-sm text-gray-500"><%= t("admin.venues.show.capacity_label", count: section.capacity) %></span>
                   <% if section.seated? && section.seats.any? %>
-                    <span class="text-sm text-gray-500">(<%= section.active_seats.count %> seats)</span>
+                    <span class="text-sm text-gray-500"><%= t("admin.venues.show.seats_count", count: section.active_seats.count) %></span>
                   <% end %>
                 </div>
                 <div class="flex items-center gap-2">
@@ -80,11 +80,11 @@
                     <%= form_with url: generate_seats_admin_venue_section_path(@venue, section), method: :post, class: "flex items-center gap-2" do %>
                       <%= text_field_tag :row_labels, nil, placeholder: "A,B,C,D", size: 12, class: "rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
                       <%= number_field_tag :seats_per_row, 10, min: 1, max: 100, class: "w-16 rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-                      <button type="submit" class="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500">Generate Seats</button>
+                      <button type="submit" class="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"><%= t("admin.venues.show.generate_seats") %></button>
                     <% end %>
                   <% end %>
-                  <%= link_to "Delete", admin_venue_section_path(@venue, section),
-                      data: { turbo_method: :delete, turbo_confirm: "Remove section '#{section.name}'?" },
+                  <%= link_to t("admin.venues.show.delete_section"), admin_venue_section_path(@venue, section),
+                      data: { turbo_method: :delete, turbo_confirm: t("admin.venues.show.remove_section_confirm", name: section.name) },
                       class: "text-sm text-red-600 hover:text-red-900 font-medium" %>
                 </div>
               </div>
@@ -92,7 +92,7 @@
               <% if section.seated? && section.seats.any? %>
                 <div class="mt-3 overflow-x-auto">
                   <div class="inline-block rounded-lg bg-gray-50 p-3">
-                    <div class="mb-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Stage</div>
+                    <div class="mb-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider"><%= t("admin.venues.show.stage") %></div>
                     <div class="border-t border-gray-300 mb-3"></div>
                     <% section.rows.each do |row_label, seats| %>
                       <div class="flex items-center gap-0.5 mb-0.5">
@@ -112,41 +112,41 @@
           <% end %>
         </div>
       <% else %>
-        <p class="text-sm text-gray-500">No sections configured. Add sections below to set up seating.</p>
+        <p class="text-sm text-gray-500"><%= t("admin.venues.show.no_sections") %></p>
       <% end %>
 
       <%# Add section form %>
       <div class="rounded-lg border-2 border-dashed border-gray-300 p-4" data-controller="venue-section-form">
-        <h3 class="text-sm font-semibold text-gray-700 mb-3">Add Section</h3>
+        <h3 class="text-sm font-semibold text-gray-700 mb-3"><%= t("admin.venues.show.add_section") %></h3>
         <%= form_with model: Section.new, url: admin_venue_sections_path(@venue), method: :post, class: "space-y-3" do |f| %>
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
-              <%= f.label :name, "Name", class: "block text-xs font-medium text-gray-600" %>
-              <%= f.text_field :name, placeholder: "e.g. Orchestra, Balcony", required: true,
+              <%= f.label :name, t("admin.venues.show.section_name"), class: "block text-xs font-medium text-gray-600" %>
+              <%= f.text_field :name, placeholder: t("admin.venues.show.section_name_placeholder"), required: true,
                   class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
             </div>
             <div>
-              <%= f.label :section_type, "Type", class: "block text-xs font-medium text-gray-600" %>
-              <%= f.select :section_type, [["General Admission", "general_admission"], ["Seated", "seated"]],
+              <%= f.label :section_type, t("admin.venues.show.section_type"), class: "block text-xs font-medium text-gray-600" %>
+              <%= f.select :section_type, [[t("admin.venues.show.general_admission"), "general_admission"], [t("admin.venues.show.section_seated"), "seated"]],
                   {}, { class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
                         data: { action: "change->venue-section-form#toggle", venue_section_form_target: "typeSelect" } } %>
             </div>
             <div data-venue-section-form-target="gaFields">
-              <%= f.label :capacity, "Capacity", class: "block text-xs font-medium text-gray-600" %>
+              <%= f.label :capacity, t("admin.venues.show.section_capacity"), class: "block text-xs font-medium text-gray-600" %>
               <%= f.number_field :capacity, min: 1, placeholder: "500", required: true,
                   class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
             </div>
             <div class="hidden" data-venue-section-form-target="seatedFields">
-              <label class="block text-xs font-medium text-gray-600">Capacity (placeholder)</label>
+              <label class="block text-xs font-medium text-gray-600"><%= t("admin.venues.show.section_capacity_placeholder") %></label>
               <input type="number" name="section[capacity]" value="1" min="1"
                      class="mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                      data-venue-section-form-target="seatedCapacity">
-              <p class="mt-0.5 text-[10px] text-gray-400">Updated automatically after generating seats.</p>
+              <p class="mt-0.5 text-[10px] text-gray-400"><%= t("admin.venues.show.capacity_auto_updated") %></p>
             </div>
           </div>
           <div class="flex items-center gap-3">
             <%= f.hidden_field :position, value: @sections.size %>
-            <%= f.submit "Add Section", class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 cursor-pointer" %>
+            <%= f.submit t("admin.venues.show.add_section_btn"), class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 cursor-pointer" %>
           </div>
         <% end %>
       </div>
@@ -156,17 +156,17 @@
   <!-- Events at this Venue -->
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-900">Events at this Venue</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t("admin.venues.show.events_at_venue") %></h2>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizer</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Starts At</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.venues.show.name") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.venues.show.organizer") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.venues.show.status") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.venues.show.starts_at") %></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("admin.venues.show.actions") %></th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -185,19 +185,19 @@
                   else "bg-gray-100 text-gray-800"
                 end %>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= status_classes %>">
-                  <%= event.status.capitalize %>
+                  <%= t("statuses.#{event.status}") %>
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= event.starts_at&.strftime("%b %d, %Y %I:%M %p") %></td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                <%= link_to "View", admin_event_path(event), class: "text-indigo-600 hover:text-indigo-900 font-medium" %>
+                <%= link_to t("admin.venues.show.view"), admin_event_path(event), class: "text-indigo-600 hover:text-indigo-900 font-medium" %>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
       <% if @events.empty? %>
-        <div class="px-6 py-8 text-center text-sm text-gray-500">No events at this venue yet.</div>
+        <div class="px-6 py-8 text-center text-sm text-gray-500"><%= t("admin.venues.show.no_events") %></div>
       <% end %>
     </div>
   </div>

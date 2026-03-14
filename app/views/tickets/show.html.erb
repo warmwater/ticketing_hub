@@ -16,19 +16,19 @@
     <div class="p-6 space-y-4">
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <p class="text-xs text-gray-500 uppercase tracking-wide">Date</p>
-          <p class="font-medium"><%= @ticket.event.starts_at.strftime("%B %d, %Y") %></p>
+          <p class="text-xs text-gray-500 uppercase tracking-wide"><%= t("tickets.show.date") %></p>
+          <p class="font-medium"><%= l(@ticket.event.starts_at, format: :long) rescue @ticket.event.starts_at.strftime("%B %d, %Y") %></p>
         </div>
         <div>
-          <p class="text-xs text-gray-500 uppercase tracking-wide">Time</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wide"><%= t("tickets.show.time") %></p>
           <p class="font-medium"><%= @ticket.event.starts_at.strftime("%I:%M %p") %></p>
         </div>
         <div>
-          <p class="text-xs text-gray-500 uppercase tracking-wide">Attendee</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wide"><%= t("tickets.show.attendee") %></p>
           <p class="font-medium"><%= @ticket.attendee_name %></p>
         </div>
         <div>
-          <p class="text-xs text-gray-500 uppercase tracking-wide">Status</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wide"><%= t("tickets.show.status") %></p>
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
             <%= case @ticket.status
                 when 'active' then 'bg-green-100 text-green-800'
@@ -36,30 +36,30 @@
                 when 'cancelled' then 'bg-red-100 text-red-800'
                 else 'bg-gray-100 text-gray-800'
                 end %>">
-            <%= @ticket.status.capitalize %>
+            <%= t("statuses.#{@ticket.status}") %>
           </span>
         </div>
       </div>
 
       <% if @ticket.seat_label.present? %>
         <div class="mt-4 rounded-lg bg-indigo-50 p-4 ring-1 ring-indigo-200">
-          <p class="text-xs text-indigo-500 uppercase tracking-wide font-semibold mb-1">Seat Assignment</p>
+          <p class="text-xs text-indigo-500 uppercase tracking-wide font-semibold mb-1"><%= t("tickets.show.seat_assignment") %></p>
           <p class="text-lg font-bold text-indigo-900"><%= @ticket.seat_label %></p>
         </div>
       <% end %>
 
       <!-- Barcode -->
       <div class="mt-6 text-center border-t pt-6">
-        <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Barcode</p>
+        <p class="text-xs text-gray-500 uppercase tracking-wide mb-2"><%= t("tickets.show.barcode") %></p>
         <div class="bg-gray-50 rounded-lg p-4">
           <p class="font-mono text-lg tracking-widest break-all"><%= @ticket.barcode %></p>
         </div>
-        <p class="text-xs text-gray-400 mt-2">Present this code at the venue entrance</p>
+        <p class="text-xs text-gray-400 mt-2"><%= t("tickets.show.present_code") %></p>
       </div>
     </div>
   </div>
 
   <div class="mt-6 text-center">
-    <%= link_to "Back to My Tickets", tickets_path, class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
+    <%= link_to t("tickets.show.back_to_tickets"), tickets_path, class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
   </div>
 </div>

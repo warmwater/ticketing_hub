@@ -1,16 +1,16 @@
 <div class="space-y-6">
-  <h1 class="text-2xl font-bold text-gray-900">Orders</h1>
+  <h1 class="text-2xl font-bold text-gray-900"><%= t("organizer.orders.index.title") %></h1>
 
   <div class="bg-white rounded-xl shadow overflow-hidden">
     <table class="w-full text-sm">
       <thead class="bg-gray-50">
         <tr class="text-left text-gray-500 uppercase text-xs tracking-wide">
-          <th class="px-6 py-3">Reference</th>
-          <th class="px-6 py-3">Event</th>
-          <th class="px-6 py-3">Buyer</th>
-          <th class="px-6 py-3">Status</th>
-          <th class="px-6 py-3">Total</th>
-          <th class="px-6 py-3">Date</th>
+          <th class="px-6 py-3"><%= t("organizer.orders.index.reference") %></th>
+          <th class="px-6 py-3"><%= t("organizer.orders.index.event") %></th>
+          <th class="px-6 py-3"><%= t("organizer.orders.index.buyer") %></th>
+          <th class="px-6 py-3"><%= t("organizer.orders.index.status") %></th>
+          <th class="px-6 py-3"><%= t("organizer.orders.index.total") %></th>
+          <th class="px-6 py-3"><%= t("organizer.orders.index.date") %></th>
           <th class="px-6 py-3"></th>
         </tr>
       </thead>
@@ -27,13 +27,13 @@
                     when 'pending' then 'bg-yellow-100 text-yellow-800'
                     when 'cancelled' then 'bg-red-100 text-red-800'
                     end %>">
-                <%= order.status.capitalize %>
+                <%= t("statuses.#{order.status}") %>
               </span>
             </td>
             <td class="px-6 py-4"><%= number_to_currency(order.total_amount) %></td>
             <td class="px-6 py-4 text-gray-500"><%= order.created_at.strftime("%b %d, %Y") %></td>
             <td class="px-6 py-4">
-              <%= link_to "View", organizer_order_path(order), class: "text-indigo-600 hover:text-indigo-800" %>
+              <%= link_to t("organizer.orders.index.view"), organizer_order_path(order), class: "text-indigo-600 hover:text-indigo-800" %>
             </td>
           </tr>
         <% end %>

@@ -15,7 +15,7 @@
           </svg>
         </div>
         <div class="ml-4">
-          <p class="text-sm font-medium text-gray-500">Total Events</p>
+          <p class="text-sm font-medium text-gray-500"><%= t("organizer.dashboard.total_events") %></p>
           <p class="text-2xl font-bold text-gray-900"><%= @total_events %></p>
         </div>
       </div>
@@ -29,7 +29,7 @@
           </svg>
         </div>
         <div class="ml-4">
-          <p class="text-sm font-medium text-gray-500">Tickets Sold</p>
+          <p class="text-sm font-medium text-gray-500"><%= t("organizer.dashboard.tickets_sold") %></p>
           <p class="text-2xl font-bold text-gray-900"><%= @total_tickets_sold %></p>
         </div>
       </div>
@@ -43,7 +43,7 @@
           </svg>
         </div>
         <div class="ml-4">
-          <p class="text-sm font-medium text-gray-500">Upcoming Events</p>
+          <p class="text-sm font-medium text-gray-500"><%= t("organizer.dashboard.upcoming_events") %></p>
           <p class="text-2xl font-bold text-gray-900"><%= @upcoming_events.count %></p>
         </div>
       </div>
@@ -56,14 +56,14 @@
       <svg class="h-5 w-5 mr-2 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      Create New Event
+      <%= t("organizer.dashboard.create_event") %>
     <% end %>
   </div>
 
   <%# Upcoming Events %>
   <div class="bg-white rounded-lg shadow mb-8">
     <div class="px-6 py-4 border-b border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-900">Upcoming Events</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t("organizer.dashboard.upcoming_events_list") %></h2>
     </div>
     <% if @upcoming_events.any? %>
       <ul class="divide-y divide-gray-200">
@@ -91,7 +91,7 @@
                   bg-blue-100 text-blue-800
                 <% end %>
               ">
-                <%= event.status.capitalize %>
+                <%= t("statuses.#{event.status}") %>
               </span>
             </div>
           </li>
@@ -99,7 +99,7 @@
       </ul>
     <% else %>
       <div class="px-6 py-12 text-center">
-        <p class="text-gray-500">No upcoming events. Create one to get started!</p>
+        <p class="text-gray-500"><%= t("organizer.dashboard.no_upcoming") %></p>
       </div>
     <% end %>
   </div>
@@ -107,16 +107,16 @@
   <%# Recent Events Table %>
   <div class="bg-white rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-900">Recent Events</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t("organizer.dashboard.recent_events") %></h2>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tickets Sold</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("organizer.dashboard.name") %></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("organizer.dashboard.status") %></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("organizer.dashboard.date") %></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t("organizer.dashboard.tickets_sold") %></th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -138,7 +138,7 @@
                     bg-blue-100 text-blue-800
                   <% end %>
                 ">
-                  <%= event.status.capitalize %>
+                  <%= t("statuses.#{event.status}") %>
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

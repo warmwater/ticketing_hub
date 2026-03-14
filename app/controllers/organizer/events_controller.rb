@@ -28,7 +28,7 @@ module Organizer
       @event = current_user.organized_events.build(event_params)
 
       if @event.save
-        redirect_to organizer_event_path(@event), notice: "Event created successfully."
+        redirect_to organizer_event_path(@event), notice: t("flash.organizer.event_created")
       else
         @venues = Venue.ordered
         render :new, status: :unprocessable_entity
@@ -47,7 +47,7 @@ module Organizer
 
       if @event.update(event_params)
         @event.media.attach(new_media) if new_media.present?
-        redirect_to organizer_event_path(@event), notice: "Event updated."
+        redirect_to organizer_event_path(@event), notice: t("flash.organizer.event_updated")
       else
         @venues = Venue.ordered
         render :edit, status: :unprocessable_entity
@@ -56,32 +56,32 @@ module Organizer
 
     def destroy
       @event.destroy
-      redirect_to organizer_events_path, notice: "Event deleted."
+      redirect_to organizer_events_path, notice: t("flash.organizer.event_deleted")
     end
 
     def publish
       @event.published!
-      redirect_to organizer_event_path(@event), notice: "Event is now live!"
+      redirect_to organizer_event_path(@event), notice: t("flash.organizer.event_published")
     end
 
     def cancel
       @event.cancelled!
-      redirect_to organizer_event_path(@event), notice: "Event cancelled."
+      redirect_to organizer_event_path(@event), notice: t("flash.organizer.event_cancelled")
     end
 
     def toggle_waiting_room
       @event.update!(waiting_room_enabled: !@event.waiting_room_enabled)
       status = @event.waiting_room_enabled? ? "enabled" : "disabled"
-      redirect_to organizer_event_path(@event), notice: "Waiting room #{status}."
+      redirect_to organizer_event_path(@event), notice: t("flash.organizer.waiting_room_toggled", status: status)
     end
 
     def purge_attachment
       attachment = ActiveStorage::Attachment.find(params[:attachment_id])
       if attachment.record == @event
         attachment.purge
-        redirect_back fallback_location: edit_organizer_event_path(@event), notice: "File removed."
+        redirect_back fallback_location: edit_organizer_event_path(@event), notice: t("flash.organizer.file_removed")
       else
-        redirect_back fallback_location: edit_organizer_event_path(@event), alert: "Attachment not found."
+        redirect_back fallback_location: edit_organizer_event_path(@event), alert: t("flash.organizer.attachment_not_found")
       end
     end
 

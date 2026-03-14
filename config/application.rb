@@ -35,5 +35,10 @@ module TicketingWebsite
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Internationalization
+    config.i18n.available_locales = [ :en, :"zh-TW", :ja ]
+    config.i18n.default_locale = :en
+    config.i18n.fallbacks = true
   end
 end

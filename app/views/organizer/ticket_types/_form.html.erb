@@ -11,55 +11,55 @@
     <% end %>
 
     <div>
-      <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.label :name, t("organizer.ticket_types.form.name"), class: "block text-sm font-medium text-gray-700" %>
       <%= f.text_field :name, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
     </div>
 
     <div>
-      <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.label :description, t("organizer.ticket_types.form.description"), class: "block text-sm font-medium text-gray-700" %>
       <%= f.text_area :description, rows: 3, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <%= f.label :price, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :price, t("organizer.ticket_types.form.price"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.number_field :price, step: 0.01, min: 0, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
       <div>
-        <%= f.label :quantity, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :quantity, t("organizer.ticket_types.form.quantity"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.number_field :quantity, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
     </div>
 
     <div>
-      <%= f.label :max_per_order, "Max per order", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.label :max_per_order, t("organizer.ticket_types.form.max_per_order"), class: "block text-sm font-medium text-gray-700" %>
       <%= f.number_field :max_per_order, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
     </div>
 
     <% if @event.venue&.has_seating? %>
       <div>
-        <%= f.label :section_id, "Venue Section", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :section_id, t("organizer.ticket_types.form.section"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.collection_select :section_id, @event.venue.sections.ordered, :id, :name,
-            { prompt: "No section (general)" },
+            { prompt: t("organizer.ticket_types.form.no_section") },
             class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-        <p class="mt-1 text-xs text-gray-500">Link this ticket type to a specific venue section for seat assignment.</p>
+        <p class="mt-1 text-xs text-gray-500"><%= t("organizer.ticket_types.form.section_hint") %></p>
       </div>
     <% end %>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <%= f.label :sale_starts_at, "Sale starts", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :sale_starts_at, t("organizer.ticket_types.form.sale_starts"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.datetime_local_field :sale_starts_at, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
       <div>
-        <%= f.label :sale_ends_at, "Sale ends", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :sale_ends_at, t("organizer.ticket_types.form.sale_ends"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.datetime_local_field :sale_ends_at, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
     </div>
 
     <div class="flex gap-3 pt-4">
-      <%= f.submit class: "bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 cursor-pointer" %>
-      <%= link_to "Cancel", organizer_event_path(@event), class: "px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50" %>
+      <%= f.submit t("organizer.ticket_types.form.save"), class: "bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 cursor-pointer" %>
+      <%= link_to t("organizer.ticket_types.form.cancel"), organizer_event_path(@event), class: "px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50" %>
     </div>
   <% end %>
 </div>

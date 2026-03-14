@@ -2,6 +2,12 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["section", "counter", "hiddenInputs", "submitBtn", "status"]
+  static values = {
+    allSelectedText: { type: String, default: "All seats selected! Ready to place order." },
+    selectMoreText: { type: String, default: "Select %{count} more seat(s) to continue" },
+    selectSeatsHintText: { type: String, default: "Select your seats to continue" },
+    seatTakenNoticeText: { type: String, default: "A seat you selected was just taken by another buyer. Please choose a different seat." }
+  }
 
   connect() {
     // Track selected seats per ticket type: { ticketTypeId: Set(seatId, ...) }
@@ -103,7 +109,7 @@ export default class extends Controller {
     this.submitBtnTarget.disabled = !allMet
 
     if (allMet) {
-      this.statusTarget.textContent = "All seats selected! Ready to place order."
+      this.statusTarget.textContent = this.allSelectedTextValue
       this.statusTarget.classList.remove("text-gray-500")
       this.statusTarget.classList.add("text-green-600", "font-medium")
     } else {
@@ -111,7 +117,7 @@ export default class extends Controller {
         const selected = this.selections[ttId] ? this.selections[ttId].size : 0
         return sum + (required - selected)
       }, 0)
-      this.statusTarget.textContent = `Select ${remaining} more seat(s) to continue`
+      this.statusTarget.textContent = this.selectMoreTextValue.replace("%{count}", remaining)
       this.statusTarget.classList.remove("text-green-600", "font-medium")
       this.statusTarget.classList.add("text-gray-500")
     }
@@ -120,7 +126,7 @@ export default class extends Controller {
   showSeatTakenNotice() {
     const notice = document.createElement("div")
     notice.className = "fixed top-4 right-4 z-50 rounded-lg bg-amber-100 border border-amber-300 px-4 py-3 text-sm text-amber-800 shadow-lg transition-opacity duration-500"
-    notice.textContent = "A seat you selected was just taken by another buyer. Please choose a different seat."
+    notice.textContent = this.seatTakenNoticeTextValue
     document.body.appendChild(notice)
     setTimeout(() => {
       notice.classList.add("opacity-0")

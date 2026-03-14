@@ -7,18 +7,18 @@
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
-      Back to Event
+      <%= t("orders.new.back_to_event") %>
     <% end %>
   </div>
 
-  <h1 class="text-3xl font-bold tracking-tight text-gray-900">Checkout</h1>
-  <p class="mt-2 text-gray-600">Complete your order for <span class="font-semibold text-gray-900"><%= @event.name %></span></p>
+  <h1 class="text-3xl font-bold tracking-tight text-gray-900"><%= t("orders.new.checkout") %></h1>
+  <p class="mt-2 text-gray-600"><%= t("orders.new.complete_order") %> <span class="font-semibold text-gray-900"><%= @event.name %></span></p>
 
   <%= form_with model: @order, url: event_orders_path(@event), method: :post, local: true, class: "mt-8 space-y-6" do |f| %>
     <!-- Order Summary -->
     <div class="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-200">
       <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-        <h2 class="text-lg font-bold text-gray-900">Order Summary</h2>
+        <h2 class="text-lg font-bold text-gray-900"><%= t("orders.new.order_summary") %></h2>
       </div>
 
       <div class="p-6">
@@ -32,14 +32,14 @@
           <div>
             <h3 class="font-bold text-gray-900"><%= @event.name %></h3>
             <p class="text-sm text-gray-600">
-              <%= @event.starts_at.strftime("%A, %B %d, %Y") %>
+              <%= l(@event.starts_at, format: :long) rescue @event.starts_at.strftime("%A, %B %d, %Y") %>
               &middot; <%= @event.venue&.name %>
             </p>
           </div>
         </div>
 
         <!-- Ticket Selection -->
-        <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">Select Tickets</h3>
+        <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500"><%= t("orders.new.select_tickets") %></h3>
         <div class="space-y-3">
           <% @event.ticket_types.each do |tt| %>
             <div class="flex items-center justify-between rounded-xl border border-gray-200 p-4 transition hover:border-indigo-300 hover:bg-indigo-50/50">
@@ -48,9 +48,9 @@
                 <% if tt.description.present? %>
                   <div class="mt-0.5 text-sm text-gray-500"><%= tt.description %></div>
                 <% end %>
-                <div class="mt-1 text-sm font-bold text-indigo-600"><%= number_to_currency(tt.price) %> each</div>
+                <div class="mt-1 text-sm font-bold text-indigo-600"><%= number_to_currency(tt.price) %> <%= t("orders.new.each") %></div>
                 <% if tt.available_quantity > 0 %>
-                  <div class="mt-0.5 text-xs text-gray-400"><%= tt.available_quantity %> available</div>
+                  <div class="mt-0.5 text-xs text-gray-400"><%= t("orders.new.available", count: tt.available_quantity) %></div>
                 <% end %>
               </div>
               <div class="ml-4">
@@ -63,7 +63,7 @@
                          class="w-20 rounded-lg border-0 text-center text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-500 sm:text-sm">
                 <% else %>
                   <span class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                    Sold Out
+                    <%= t("events.show.sold_out") %>
                   </span>
                 <% end %>
               </div>
@@ -75,10 +75,10 @@
       <!-- Order Total -->
       <div class="border-t border-gray-200 bg-gray-50 px-6 py-4">
         <div class="flex items-center justify-between">
-          <span class="text-lg font-bold text-gray-900">Estimated Total</span>
+          <span class="text-lg font-bold text-gray-900"><%= t("orders.new.estimated_total") %></span>
           <span class="text-2xl font-extrabold text-indigo-600" id="order-total">$0.00</span>
         </div>
-        <p class="mt-1 text-xs text-gray-500">Final total calculated at checkout based on selected quantities</p>
+        <p class="mt-1 text-xs text-gray-500"><%= t("orders.new.total_hint") %></p>
       </div>
     </div>
 
@@ -89,17 +89,17 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <div>
-          <h4 class="text-sm font-semibold text-amber-800">Payment Integration Coming Soon</h4>
-          <p class="mt-1 text-sm text-amber-700">Payment processing will be added in a future update. For now, orders will be placed without payment.</p>
+          <h4 class="text-sm font-semibold text-amber-800"><%= t("orders.new.payment_title") %></h4>
+          <p class="mt-1 text-sm text-amber-700"><%= t("orders.new.payment_hint") %></p>
         </div>
       </div>
     </div>
 
     <!-- Submit -->
     <div class="flex items-center justify-end gap-4">
-      <%= link_to "Cancel", event_path(@event),
+      <%= link_to t("orders.new.cancel"), event_path(@event),
           class: "rounded-lg bg-gray-100 px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-200" %>
-      <%= f.submit "Place Order",
+      <%= f.submit t("orders.new.place_order"),
           class: "rounded-lg bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer" %>
     </div>
   <% end %>

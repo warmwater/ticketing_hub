@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
     if @event.waiting_room_active?
       entry = @event.waiting_room_entries.find_by(user: current_user)
       unless entry&.admitted? && !entry.admission_expired?
-        redirect_to event_waiting_room_path(@event), alert: "Please join the waiting room first."
+        redirect_to event_waiting_room_path(@event), alert: t("flash.join_waiting_room")
         return
       end
     end
@@ -30,7 +30,7 @@ class OrdersController < ApplicationController
     if @event.waiting_room_active?
       entry = @event.waiting_room_entries.find_by(user: current_user)
       unless entry&.admitted? && !entry.admission_expired?
-        redirect_to event_waiting_room_path(@event), alert: "Your admission has expired."
+        redirect_to event_waiting_room_path(@event), alert: t("flash.admission_expired")
         return
       end
     end
@@ -44,7 +44,7 @@ class OrdersController < ApplicationController
     build_order_items
 
     if @order.order_items.empty?
-      redirect_to event_path(@event), alert: "Please select at least one ticket."
+      redirect_to event_path(@event), alert: t("flash.select_ticket")
       return
     end
 
@@ -77,7 +77,7 @@ class OrdersController < ApplicationController
       # Trigger next user admission
       AdmitNextUserJob.perform_later(@event.id)
 
-      redirect_to order_path(@order), notice: "Order placed successfully! Tickets have been generated."
+      redirect_to order_path(@order), notice: t("flash.order_success")
     else
       @ticket_types = @event.ticket_types.on_sale
       render :new, status: :unprocessable_entity
@@ -89,12 +89,12 @@ class OrdersController < ApplicationController
     @ticket_quantities = session[:pending_ticket_quantities] || {}
 
     unless @event.seating_customer_pick?
-      redirect_to event_path(@event), alert: "Seat selection is not available for this event."
+      redirect_to event_path(@event), alert: t("flash.seat_selection_unavailable")
       return
     end
 
     if @ticket_quantities.empty?
-      redirect_to event_path(@event), alert: "Please select tickets first."
+      redirect_to event_path(@event), alert: t("flash.select_tickets_first")
       return
     end
 
@@ -144,7 +144,7 @@ class OrdersController < ApplicationController
     end
 
     if @order.order_items.empty?
-      redirect_to event_path(@event), alert: "Please select at least one ticket."
+      redirect_to event_path(@event), alert: t("flash.select_ticket")
       return
     end
 
@@ -169,7 +169,7 @@ class OrdersController < ApplicationController
 
       AdmitNextUserJob.perform_later(@event.id)
 
-      redirect_to order_path(@order), notice: "Order placed successfully! Seats have been assigned."
+      redirect_to order_path(@order), notice: t("flash.order_success_seats")
     else
       redirect_to event_path(@event), alert: @order.errors.full_messages.join(", ")
     end

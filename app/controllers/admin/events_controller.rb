@@ -28,7 +28,7 @@ module Admin
 
       if @event.update(event_params)
         @event.media.attach(new_media) if new_media.present?
-        redirect_to admin_event_path(@event), notice: "Event updated."
+        redirect_to admin_event_path(@event), notice: t("flash.admin.event_updated")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -36,26 +36,26 @@ module Admin
 
     def destroy
       @event.destroy
-      redirect_to admin_events_path, notice: "Event deleted."
+      redirect_to admin_events_path, notice: t("flash.admin.event_deleted")
     end
 
     def publish
       @event.published!
-      redirect_to admin_event_path(@event), notice: "Event published."
+      redirect_to admin_event_path(@event), notice: t("flash.admin.event_published")
     end
 
     def cancel
       @event.cancelled!
-      redirect_to admin_event_path(@event), notice: "Event cancelled."
+      redirect_to admin_event_path(@event), notice: t("flash.admin.event_cancelled")
     end
 
     def purge_attachment
       attachment = ActiveStorage::Attachment.find(params[:attachment_id])
       if attachment.record == @event
         attachment.purge
-        redirect_back fallback_location: edit_admin_event_path(@event), notice: "File removed."
+        redirect_back fallback_location: edit_admin_event_path(@event), notice: t("flash.admin.file_removed")
       else
-        redirect_back fallback_location: edit_admin_event_path(@event), alert: "Attachment not found."
+        redirect_back fallback_location: edit_admin_event_path(@event), alert: t("flash.admin.attachment_not_found")
       end
     end
 

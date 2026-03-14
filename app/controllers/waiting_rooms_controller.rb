@@ -9,7 +9,7 @@ class WaitingRoomsController < ApplicationController
     if @entry&.admitted? && !@entry.admission_expired?
       # Set admission cookie so middleware passes them through to Rails
       set_admission_cookie(@entry)
-      redirect_to new_event_order_path(@event), notice: "You're admitted! Complete your purchase."
+      redirect_to new_event_order_path(@event), notice: t("flash.waiting_rooms.admitted")
       return
     end
 
@@ -23,7 +23,7 @@ class WaitingRoomsController < ApplicationController
     entry = @event.waiting_room_entries.find_or_initialize_by(user: current_user)
 
     if entry.persisted? && entry.waiting?
-      redirect_to event_waiting_room_path(@event), notice: "You're already in the waiting room."
+      redirect_to event_waiting_room_path(@event), notice: t("flash.waiting_rooms.already_in_room")
       return
     end
 
@@ -37,7 +37,7 @@ class WaitingRoomsController < ApplicationController
       # Trigger admission check
       AdmitNextUserJob.perform_later(@event.id)
 
-      redirect_to event_waiting_room_path(@event), notice: "You've joined the waiting room."
+      redirect_to event_waiting_room_path(@event), notice: t("flash.waiting_rooms.joined")
     else
       redirect_to event_waiting_room_path(@event)
     end
@@ -74,7 +74,7 @@ class WaitingRoomsController < ApplicationController
     entry = @event.waiting_room_entries.find_by(user: current_user)
     entry&.update!(status: :left)
     clear_waiting_room_cookies
-    redirect_to event_path(@event), notice: "You've left the waiting room."
+    redirect_to event_path(@event), notice: t("flash.waiting_rooms.left")
   end
 
   private

@@ -1,5 +1,5 @@
 <div class="max-w-2xl mx-auto">
-  <h1 class="text-2xl font-bold text-gray-900 mb-6">Edit Event</h1>
+  <h1 class="text-2xl font-bold text-gray-900 mb-6"><%= t("admin.events.edit.title") %></h1>
 
   <div class="bg-white rounded-xl shadow p-6">
     <%= form_with model: @event, url: admin_event_path(@event), class: "space-y-4" do |f| %>
@@ -14,43 +14,43 @@
       <% end %>
 
       <div>
-        <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :name, t("admin.events.edit.name"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.text_field :name, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
 
       <div>
-        <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :description, t("admin.events.edit.description"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.text_area :description, rows: 4, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <%= f.label :starts_at, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.label :starts_at, t("admin.events.edit.starts_at"), class: "block text-sm font-medium text-gray-700" %>
           <%= f.datetime_local_field :starts_at, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
         </div>
         <div>
-          <%= f.label :ends_at, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.label :ends_at, t("admin.events.edit.ends_at"), class: "block text-sm font-medium text-gray-700" %>
           <%= f.datetime_local_field :ends_at, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
         </div>
       </div>
 
       <div>
-        <%= f.label :venue_id, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :venue_id, t("admin.events.edit.venue_id"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.collection_select :venue_id, Venue.ordered, :id, :name, {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
 
       <div>
-        <%= f.label :status, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.select :status, Event.statuses.keys.map { |s| [s.capitalize, s] }, {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        <%= f.label :status, t("admin.events.edit.status"), class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :status, Event.statuses.keys.map { |s| [t("statuses.#{s}"), s] }, {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
 
       <div>
-        <%= f.label :max_tickets_per_order, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :max_tickets_per_order, t("admin.events.edit.max_tickets_per_order"), class: "block text-sm font-medium text-gray-700" %>
         <%= f.number_field :max_tickets_per_order, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
 
       <fieldset class="border rounded-lg p-4">
-        <legend class="text-sm font-medium text-gray-700 px-2">Event Media</legend>
+        <legend class="text-sm font-medium text-gray-700 px-2"><%= t("admin.events.edit.event_media") %></legend>
         <div class="space-y-6">
           <%= render "shared/cover_image_field", form: f, event: @event %>
 
@@ -62,19 +62,19 @@
       </fieldset>
 
       <fieldset class="border rounded-lg p-4">
-        <legend class="text-sm font-medium text-gray-700 px-2">Waiting Room</legend>
+        <legend class="text-sm font-medium text-gray-700 px-2"><%= t("admin.events.edit.waiting_room") %></legend>
         <div class="space-y-3">
           <div class="flex items-center gap-2">
             <%= f.check_box :waiting_room_enabled, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
-            <%= f.label :waiting_room_enabled, "Enable waiting room", class: "text-sm text-gray-700" %>
+            <%= f.label :waiting_room_enabled, t("admin.events.edit.enable_waiting_room"), class: "text-sm text-gray-700" %>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <%= f.label :waiting_room_capacity, "Capacity", class: "block text-sm text-gray-700" %>
+              <%= f.label :waiting_room_capacity, t("admin.events.edit.wr_capacity"), class: "block text-sm text-gray-700" %>
               <%= f.number_field :waiting_room_capacity, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
             </div>
             <div>
-              <%= f.label :waiting_room_admission_minutes, "Admission window (min)", class: "block text-sm text-gray-700" %>
+              <%= f.label :waiting_room_admission_minutes, t("admin.events.edit.wr_admission"), class: "block text-sm text-gray-700" %>
               <%= f.number_field :waiting_room_admission_minutes, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
             </div>
           </div>
@@ -83,18 +83,18 @@
 
       <% if @event.venue&.has_seating? %>
         <fieldset class="border rounded-lg p-4">
-          <legend class="text-sm font-medium text-gray-700 px-2">Seat Selection</legend>
+          <legend class="text-sm font-medium text-gray-700 px-2"><%= t("admin.events.edit.seat_selection") %></legend>
           <div class="space-y-3">
             <div>
-              <%= f.label :seat_selection_mode, "Seat selection mode", class: "block text-sm text-gray-700" %>
+              <%= f.label :seat_selection_mode, t("admin.events.edit.seat_selection_mode"), class: "block text-sm text-gray-700" %>
               <%= f.select :seat_selection_mode,
-                  [["None — no seat assignment", "none"],
-                   ["Customer picks seats", "customer_pick"],
-                   ["Auto-assign seats", "auto_assign"]],
+                  [[t("admin.events.edit.mode_none"), "none"],
+                   [t("admin.events.edit.mode_customer"), "customer_pick"],
+                   [t("admin.events.edit.mode_auto"), "auto_assign"]],
                   {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
               <p class="mt-1 text-xs text-gray-500">
-                <strong>Customer picks:</strong> buyers choose their own seats on a seat map.
-                <strong>Auto-assign:</strong> system assigns best available seats automatically.
+                <strong><%= t("admin.events.edit.mode_customer_hint") %></strong>
+                <strong><%= t("admin.events.edit.mode_auto_hint") %></strong>
               </p>
             </div>
           </div>
@@ -102,8 +102,8 @@
       <% end %>
 
       <div class="flex gap-3 pt-4">
-        <%= f.submit "Update Event", class: "bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 cursor-pointer" %>
-        <%= link_to "Cancel", admin_event_path(@event), class: "px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50" %>
+        <%= f.submit t("admin.events.edit.update_event"), class: "bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 cursor-pointer" %>
+        <%= link_to t("admin.events.edit.cancel"), admin_event_path(@event), class: "px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50" %>
       </div>
     <% end %>
   </div>
