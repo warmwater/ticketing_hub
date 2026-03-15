@@ -1,0 +1,9 @@
+concert:
+  name: "Live Concert"
+  venue: concert_hall
+  organizer: organizer
+  status: 1
+  seat_selection_mode: 1
+  starts_at: <%= 1.week.from_now.iso8601 %>
+  ends_at: <%= (1.week.from_now + 3.hours).iso8601 %>
+  waiting_room_enabled: false

@@ -1,0 +1,5 @@
+concert_hall:
+  name: "Concert Hall"
+  address: "123 Music Ave"
+  capacity: 100
+  created_by: organizer

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :orders, only: [ :index, :show ]
   resources :tickets, only: [ :index, :show ]
+  resources :seat_holds, only: [ :create, :destroy ]
 
   # Turbo Native path configuration
   get "/turbo-native/path-configuration", to: "turbo_native#path_configuration", as: :turbo_native_path_configuration

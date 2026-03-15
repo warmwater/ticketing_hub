@@ -167,6 +167,7 @@ zh-TW:
       venue_seating: "場地座位"
       available: "可選"
       taken: "已售"
+      held: "暫留"
       general_admission: "自由入場"
       assigned_seating: "對號入座"
       spots_available: "%{available} / %{total} 個位置可用"
@@ -236,6 +237,7 @@ zh-TW:
       available: "可選"
       selected: "已選"
       taken: "已售"
+      held: "暫留"
       select_counter: "已選 %{selected} / %{total} 個座位"
       stage: "舞台"
       select_seats_hint: "選擇您的座位以繼續"
@@ -243,6 +245,10 @@ zh-TW:
       select_more: "還需選擇 %{count} 個座位"
       confirm_seats: "確認座位並下單"
       seat_taken_notice: "您選擇的座位剛被其他買家搶先購買。請選擇其他座位。"
+      seat_held_notice: "此座位正被其他買家暫時保留。請選擇其他座位。"
+      held_tooltip: "其他買家暫時保留中"
+      taken_tooltip: "已售出"
+      seat_title: "%{row}排 %{number}號座位"
 
   # Tickets
   tickets:

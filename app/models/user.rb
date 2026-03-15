@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
   has_many :tickets, through: :orders
   has_many :waiting_room_entries, dependent: :destroy
+  has_many :seat_holds, dependent: :destroy
   has_many :created_venues, class_name: "Venue", foreign_key: :created_by_id, dependent: :nullify
 
   validates :name, presence: true

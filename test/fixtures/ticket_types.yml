@@ -1,0 +1,7 @@
+orchestra_ticket:
+  name: "Orchestra Seat"
+  event: concert
+  section: orchestra
+  price: 50.00
+  quantity: 20
+  max_per_order: 4

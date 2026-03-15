@@ -1,0 +1,6 @@
+orchestra:
+  name: "Orchestra"
+  venue: concert_hall
+  section_type: 1
+  capacity: 20
+  position: 0

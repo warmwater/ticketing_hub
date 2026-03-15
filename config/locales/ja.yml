@@ -167,6 +167,7 @@ ja:
       venue_seating: "会場の座席"
       available: "空席"
       taken: "売約済み"
+      held: "仮押さえ"
       general_admission: "自由席"
       assigned_seating: "指定席"
       spots_available: "%{available} / %{total} 席空き"
@@ -236,6 +237,7 @@ ja:
       available: "空席"
       selected: "選択中"
       taken: "売約済み"
+      held: "仮押さえ"
       select_counter: "%{selected} / %{total} 席を選択"
       stage: "ステージ"
       select_seats_hint: "続行するには座席を選択してください"
@@ -243,6 +245,10 @@ ja:
       select_more: "あと%{count}席選択してください"
       confirm_seats: "座席を確定して注文する"
       seat_taken_notice: "選択した座席が他の方に購入されました。別の座席をお選びください。"
+      seat_held_notice: "この座席は他のお客様が仮押さえしています。別の座席をお選びください。"
+      held_tooltip: "他のお客様が仮押さえ中"
+      taken_tooltip: "販売済み"
+      seat_title: "%{row}列 %{number}番席"
 
   # Tickets
   tickets:

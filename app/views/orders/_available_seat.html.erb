@@ -1,0 +1,9 @@
+<%# Green interactive seat — available for selection. %>
+<%# Used by Turbo Streams to restore a seat after a hold expires or is released. %>
+<button type="button"
+        id="seat_<%= seat.id %>"
+        class="seat-btn h-7 w-7 rounded bg-emerald-500 text-white text-center text-xs leading-7 font-medium ring-1 ring-emerald-600 hover:bg-emerald-400 transition cursor-pointer"
+        data-action="click->seat-picker#toggleSeat"
+        data-seat-id="<%= seat.id %>"
+        data-ticket-type-id="<%= ticket_type.id %>"
+        title="<%= t("orders.select_seats.seat_title", row: seat.row_label, number: seat.seat_number) %>"><%= seat.seat_number %></button>

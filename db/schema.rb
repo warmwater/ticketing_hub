@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_043814) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_15_204258) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -84,6 +84,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_043814) do
     t.index ["reference_number"], name: "index_orders_on_reference_number", unique: true
     t.index ["status"], name: "index_orders_on_status"
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "seat_holds", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "event_id", null: false
+    t.datetime "expires_at", null: false
+    t.integer "seat_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["event_id"], name: "index_seat_holds_on_event_id"
+    t.index ["expires_at"], name: "index_seat_holds_on_expires_at"
+    t.index ["seat_id", "event_id"], name: "index_seat_holds_on_seat_and_event", unique: true
+    t.index ["seat_id"], name: "index_seat_holds_on_seat_id"
+    t.index ["user_id", "event_id"], name: "index_seat_holds_on_user_and_event"
+    t.index ["user_id"], name: "index_seat_holds_on_user_id"
   end
 
   create_table "seats", force: :cascade do |t|
@@ -197,6 +212,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_043814) do
   add_foreign_key "order_items", "ticket_types"
   add_foreign_key "orders", "events"
   add_foreign_key "orders", "users"
+  add_foreign_key "seat_holds", "events"
+  add_foreign_key "seat_holds", "seats"
+  add_foreign_key "seat_holds", "users"
   add_foreign_key "seats", "sections"
   add_foreign_key "sections", "venues"
   add_foreign_key "ticket_types", "events"

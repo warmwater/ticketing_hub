@@ -179,6 +179,7 @@ en:
       venue_seating: "Venue Seating"
       available: "Available"
       taken: "Taken"
+      held: "Held"
       general_admission: "General Admission"
       assigned_seating: "Assigned Seating"
       spots_available: "%{available} / %{total} spots available"
@@ -248,6 +249,7 @@ en:
       available: "Available"
       selected: "Selected"
       taken: "Taken"
+      held: "Held"
       select_counter: "Select %{selected} / %{total} seats"
       stage: "Stage"
       select_seats_hint: "Select your seats to continue"
@@ -255,6 +257,10 @@ en:
       select_more: "Select %{count} more seat(s) to continue"
       confirm_seats: "Confirm Seats & Place Order"
       seat_taken_notice: "A seat you selected was just taken by another buyer. Please choose a different seat."
+      seat_held_notice: "This seat is temporarily held by another buyer. Please choose a different seat."
+      held_tooltip: "Temporarily held by another buyer"
+      taken_tooltip: "Taken"
+      seat_title: "Row %{row}, Seat %{number}"
 
   # Tickets
   tickets:

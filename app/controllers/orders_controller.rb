@@ -98,7 +98,9 @@ class OrdersController < ApplicationController
       return
     end
 
-    # Build ticket types and sections with available seats
+    # Release expired holds and build seat data for each selected ticket type
+    SeatHold.release_expired_for_event!(@event)
+
     @selections = []
     @ticket_quantities.each do |ticket_type_id, quantity|
       qty = quantity.to_i
@@ -109,15 +111,22 @@ class OrdersController < ApplicationController
       next unless section&.seated?
 
       available_seats = section.available_seats_for_event(@event)
-      rows = available_seats.group_by(&:row_label)
+      all_seat_ids    = section.seats.where(active: true).pluck(:id)
+      confirmed_taken = all_seat_ids - available_seats.pluck(:id)
+
+      # Seats held by OTHER users show as amber (not by me)
+      held_by_others = SeatHold.active
+                                .where(event: @event, seat_id: all_seat_ids)
+                                .where.not(user: current_user)
+                                .pluck(:seat_id)
 
       @selections << {
         ticket_type: ticket_type,
         section: section,
         quantity: qty,
-        rows: rows,
         all_seats: section.seats.where(active: true).order(:row_label, :seat_number),
-        taken_seat_ids: section.seats.where(active: true).pluck(:id) - available_seats.pluck(:id)
+        taken_seat_ids:      confirmed_taken,
+        held_seat_ids:       held_by_others
       }
     end
   end
@@ -161,6 +170,9 @@ class OrdersController < ApplicationController
       @order.update!(status: :confirmed)
       @order.generate_tickets!(seat_assignments)
       @order.broadcast_taken_seats
+
+      # Release this user's seat holds — seats are now confirmed tickets
+      current_user.seat_holds.where(event: @event).destroy_all
 
       # Mark waiting room entry as completed and clear middleware cookies
       entry = @event.waiting_room_entries.find_by(user: current_user)

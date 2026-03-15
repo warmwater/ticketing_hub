@@ -1,0 +1,4 @@
+<%# Amber seat — temporarily held by another buyer. Not interactive. %>
+<div id="seat_<%= seat.id %>"
+     class="h-7 w-7 rounded cursor-not-allowed bg-amber-400 text-amber-900 text-center text-xs leading-7 font-medium ring-1 ring-amber-500"
+     title="<%= t("orders.select_seats.held_tooltip") %>"><%= seat.seat_number %></div>

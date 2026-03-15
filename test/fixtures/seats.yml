@@ -1,0 +1,17 @@
+a1:
+  section: orchestra
+  row_label: "A"
+  seat_number: 1
+  active: true
+
+a2:
+  section: orchestra
+  row_label: "A"
+  seat_number: 2
+  active: true
+
+a3:
+  section: orchestra
+  row_label: "A"
+  seat_number: 3
+  active: true

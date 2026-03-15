@@ -33,6 +33,15 @@ class Order < ApplicationRecord
           }
 
           if seat.present?
+            # Pessimistic lock: prevents two concurrent transactions from
+            # assigning the same seat between our check and the INSERT.
+            seat = Seat.lock.find(seat.id)
+
+            if seat.taken_for_event?(event)
+              raise ActiveRecord::Rollback,
+                    "Seat #{seat.display_label} was just taken by someone else"
+            end
+
             attrs.merge!(
               seat: seat,
               section_name: section&.name,

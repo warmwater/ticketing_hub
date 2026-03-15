@@ -22,10 +22,12 @@
     <%= form_with url: event_orders_path(@event), method: :post, data: {
           controller: "seat-picker",
           turbo_frame: "_top",
+          seat_picker_event_id_value: @event.id,
           seat_picker_all_selected_text_value: t("orders.select_seats.all_selected"),
           seat_picker_select_more_text_value: t("orders.select_seats.select_more"),
           seat_picker_select_seats_hint_text_value: t("orders.select_seats.select_seats_hint"),
-          seat_picker_seat_taken_notice_text_value: t("orders.select_seats.seat_taken_notice")
+          seat_picker_seat_taken_notice_text_value: t("orders.select_seats.seat_taken_notice"),
+          seat_picker_seat_held_notice_text_value: t("orders.select_seats.seat_held_notice")
         } do |f| %>
       <div class="p-6 sm:p-8 space-y-8">
         <!-- Legend -->
@@ -37,6 +39,10 @@
           <div class="flex items-center gap-1.5">
             <div class="h-5 w-5 rounded bg-indigo-500 ring-1 ring-indigo-600"></div>
             <span class="text-gray-600"><%= t("orders.select_seats.selected") %></span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="h-5 w-5 rounded bg-amber-400 ring-1 ring-amber-500"></div>
+            <span class="text-gray-600"><%= t("orders.select_seats.held") %></span>
           </div>
           <div class="flex items-center gap-1.5">
             <div class="h-5 w-5 rounded bg-slate-400 ring-1 ring-slate-500"></div>
@@ -75,19 +81,12 @@
                   <div class="flex items-center gap-1 mb-1">
                     <span class="w-7 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
                     <% seats.each do |seat| %>
-                      <% taken = sel[:taken_seat_ids].include?(seat.id) %>
-                      <% if taken %>
+                      <% if sel[:taken_seat_ids].include?(seat.id) %>
                         <%= render "orders/taken_seat", seat: seat %>
+                      <% elsif sel[:held_seat_ids].include?(seat.id) %>
+                        <%= render "orders/held_seat", seat: seat %>
                       <% else %>
-                        <button type="button"
-                                id="seat_<%= seat.id %>"
-                                class="seat-btn h-7 w-7 rounded bg-emerald-500 text-white text-center text-xs leading-7 font-medium ring-1 ring-emerald-600 hover:bg-emerald-400 transition cursor-pointer"
-                                data-action="click->seat-picker#toggleSeat"
-                                data-seat-id="<%= seat.id %>"
-                                data-ticket-type-id="<%= sel[:ticket_type].id %>"
-                                title="Row <%= seat.row_label %>, Seat <%= seat.seat_number %>">
-                          <%= seat.seat_number %>
-                        </button>
+                        <%= render "orders/available_seat", seat: seat, ticket_type: sel[:ticket_type] %>
                       <% end %>
                     <% end %>
                     <span class="w-7 text-center text-xs font-bold text-gray-500 shrink-0"><%= row_label %></span>
