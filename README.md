@@ -1,6 +1,6 @@
 # TicketHub
 
-A full-featured event ticketing platform built with **Rails 8.1** and **Tailwind CSS v4**. TicketHub supports event creation, venue management with configurable seating layouts, a real-time waiting room system, and full internationalization (English, Traditional Chinese, Japanese).
+A full-featured event ticketing platform built with **Rails 8.1** and **Tailwind CSS v4**. TicketHub supports event creation, venue management with configurable seating layouts, real-time seat selection with temporary holds, per-user purchase limits, a waiting room system, and full internationalization (English, Traditional Chinese, Japanese).
 
 **Just a fun project to test the capability of Claude Code, everything is created by Claude, including this README.md**
 
@@ -12,16 +12,21 @@ A full-featured event ticketing platform built with **Rails 8.1** and **Tailwind
 
 ### Venue Seating Layout (Admin)
 ![Seating Layout](public/screenshots/seating_layout.gif)
-*Admins configure multi-section venues with seated rows (e.g. Front Row 2×10, Main Floor 6×10) or General Admission areas.*
+*Admins configure multi-section venues with seated rows (e.g. Front Row 2x10, Main Floor 6x10) or General Admission areas.*
 
 ### Interactive Seat Picker (Buyer)
 ![Seat Picker](public/screenshots/seat_picker.gif)
-*Buyers pick individual seats in real time — available seats in green, already-taken seats in gray, selected seats in indigo.*
+*Buyers pick individual seats in real time — available seats in green, selected seats in indigo, held seats in amber, taken seats in gray. Seats are temporarily held via Turbo Streams so other buyers see updates instantly.*
+
+### Per-User Purchase Limit
+![Purchase Limit](public/screenshots/purchase_limit.gif)
+*Admins set a per-user ticket limit for each event. The banner shows remaining allowance, and exceeding the limit triggers a clear error message.*
 
 ## Features
 
 - **Event browsing & ticket purchasing** — Public event listings with cover images, media galleries, and multiple ticket types
-- **Seat selection** — Interactive seat picker for venues with assigned seating (powered by Stimulus)
+- **Seat selection with real-time holds** — Interactive seat picker for venues with assigned seating; selected seats are temporarily held via Turbo Streams so other buyers see live availability
+- **Per-user purchase limits** — Admins can set a maximum number of tickets each user can buy per event (across all orders), preventing bulk purchasing
 - **Waiting room** — Redis-backed queue system that controls buyer flow during high-demand on-sales
 - **Organizer dashboard** — Event creation/management, ticket type configuration, order tracking, and waiting room controls
 - **Admin dashboard** — User management, venue/section/seat configuration, and platform-wide event oversight
@@ -70,9 +75,9 @@ The seed file creates default accounts you can use to explore the app:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | `admin@tickethub.com` | `password` |
-| Organizer | *(check `db/seeds.rb`)* | `password` |
-| Attendee | *(check `db/seeds.rb`)* | `password` |
+| Admin | `admin@tickethub.com` | `password123` |
+| Organizer | `organizer@tickethub.com` | `password123` |
+| Attendee | `attendant@tickethub.com` | `password123` |
 
 ## Starting the Service
 
@@ -128,10 +133,11 @@ app/
 │   └── controllers/    # Stimulus controllers (seat picker, dropdown, etc.)
 ├── models/
 │   ├── user.rb         # Roles: attendee, organizer, admin
-│   ├── event.rb
+│   ├── event.rb        # Events with purchase limits and seat selection modes
 │   ├── venue.rb
 │   ├── section.rb      # General admission or seated
 │   ├── seat.rb
+│   ├── seat_hold.rb    # Temporary seat reservations with Turbo broadcasts
 │   ├── order.rb
 │   ├── ticket.rb
 │   └── waiting_room_entry.rb
