@@ -69,7 +69,7 @@ module Admin
       params.require(:event).permit(:name, :description, :starts_at, :ends_at, :venue_id, :status,
                                     :waiting_room_enabled, :waiting_room_capacity,
                                     :waiting_room_admission_minutes, :max_tickets_per_order,
-                                    :cover_image, :seat_selection_mode)
+                                    :max_tickets_per_user, :cover_image, :seat_selection_mode)
     end
   end
 end

@@ -44,9 +44,16 @@
         <%= f.select :status, Event.statuses.keys.map { |s| [t("statuses.#{s}"), s] }, {}, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
       </div>
 
-      <div>
-        <%= f.label :max_tickets_per_order, t("admin.events.edit.max_tickets_per_order"), class: "block text-sm font-medium text-gray-700" %>
-        <%= f.number_field :max_tickets_per_order, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :max_tickets_per_order, t("admin.events.edit.max_tickets_per_order"), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.number_field :max_tickets_per_order, min: 1, class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        </div>
+        <div>
+          <%= f.label :max_tickets_per_user, t("admin.events.edit.max_tickets_per_user"), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.number_field :max_tickets_per_user, min: 1, placeholder: t("admin.events.edit.unlimited"), class: "mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+          <p class="mt-1 text-xs text-gray-500"><%= t("admin.events.edit.max_tickets_per_user_hint") %></p>
+        </div>
       </div>
 
       <fieldset class="border rounded-lg p-4">

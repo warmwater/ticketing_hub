@@ -17,6 +17,7 @@ class Event < ApplicationRecord
   validates :name, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
+  validates :max_tickets_per_user, numericality: { greater_than: 0, only_integer: true, allow_nil: true }
   validate :ends_after_starts
   validate :acceptable_cover_image
   validate :acceptable_media
@@ -47,6 +48,15 @@ class Event < ApplicationRecord
 
   def seated_event?
     !seating_none?
+  end
+
+  def tickets_purchased_by(user)
+    orders.where(user: user, status: [ :confirmed ]).joins(:tickets).count
+  end
+
+  def remaining_allowance_for(user)
+    return nil unless max_tickets_per_user
+    [ max_tickets_per_user - tickets_purchased_by(user), 0 ].max
   end
 
   def waiting_room_active?

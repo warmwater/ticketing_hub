@@ -95,7 +95,7 @@ module Organizer
       params.require(:event).permit(:name, :description, :starts_at, :ends_at, :venue_id,
                                     :waiting_room_enabled, :waiting_room_capacity,
                                     :waiting_room_admission_minutes, :max_tickets_per_order,
-                                    :seat_selection_mode, :cover_image)
+                                    :max_tickets_per_user, :seat_selection_mode, :cover_image)
     end
   end
 end

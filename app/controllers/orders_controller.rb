@@ -48,6 +48,11 @@ class OrdersController < ApplicationController
       return
     end
 
+    # Check per-user purchase limit
+    if over_purchase_limit?(@order)
+      return
+    end
+
     # For customer_pick events, redirect to seat selection page instead of creating order
     if @event.seating_customer_pick?
       session[:pending_ticket_quantities] = params[:ticket_quantities].to_unsafe_h
@@ -157,6 +162,11 @@ class OrdersController < ApplicationController
       return
     end
 
+    # Check per-user purchase limit
+    if over_purchase_limit?(@order)
+      return
+    end
+
     # Parse seat selections: { ticket_type_id => [seat_id, seat_id, ...] }
     seat_assignments = {}
     params[:seat_selections].each do |ticket_type_id, seat_ids|
@@ -209,6 +219,23 @@ class OrdersController < ApplicationController
   def clear_waiting_room_cookies(event)
     cookies.delete("_wr_queue_#{event.id}", path: "/events/#{event.id}")
     cookies.delete("_wr_admitted_#{event.id}", path: "/events/#{event.id}")
+  end
+
+  def over_purchase_limit?(order)
+    limit = @event.max_tickets_per_user
+    return false unless limit
+
+    already_purchased = @event.tickets_purchased_by(current_user)
+    new_qty = order.order_items.sum(&:quantity)
+
+    if already_purchased + new_qty > limit
+      remaining = [ limit - already_purchased, 0 ].max
+      redirect_to event_path(@event), alert: t("flash.purchase_limit_exceeded",
+        limit: limit, remaining: remaining)
+      true
+    else
+      false
+    end
   end
 
   def build_order_items
