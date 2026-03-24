@@ -47,7 +47,7 @@ gem "devise"
 # Authorization
 gem "pundit"
 # Pagination
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.4"
 # Redis for waiting room middleware
 gem "redis", "~> 5.0"
 
